@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        header h1 i {
+            margin-right: 10px;
+        }
+        nav {
+            background-color: #34495e;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style-type: none;
+        }
+        .book-list-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: transform 0.2s ease-in-out;
+        }
+        .book-list-item:hover {
+            transform: scale(1.02);
+        }
+        .book-list-item a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .book-list-item img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .book-details {
+            padding: 15px;
+        }
+        .book-details h2 {
+            font-size: 1.2em;
+            margin: 0 0 10px 0;
+            color: #333;
+            text-align: center;
+        }
+        .book-details p {
+            margin: 5px 0;
+        }
+        footer {
+            background-color: #34495e;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .content-form {
+            margin-top: 20px;
+        }
+        .content-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .content-form input, .content-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .content-form button {
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .content-form button:hover {
+            background-color: #2471a3;
+        }
+        .content-cover {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-book"></i>Nainarh✍️ </h1>
+</header>
+
+<nav>
+    <a onclick="showBooks()"><i class="fas fa-th"></i> Library</a>
+    <a onclick="showContentForm()"><i class="fas fa-plus"></i> Author ✍️</a>
+</nav>
+
+<div class="container" id="books-container">
+    <!-- Books will be dynamically inserted here -->
+</div>
+
+<div class="container content-form" id="content-form" style="display: none;">
+    <h2>📑</h2>
+    <form onsubmit="publishContent(event)">
+        <label for="content-title">Book Title</label>
+        <input type="text" id="content-title" name="content-title" placeholder="Enter the book title" required>
+
+        <label for="content-url">Docs URL</label>
+        <input type="url" id="content-url" name="content-url" placeholder="Enter your docs link" required>
+
+        <label for="content-cover">Book Cover</label>
+        <input type="file" id="content-cover" name="content-cover" class="content-cover" accept="image/*" required>
+
+        <label for="content-description">Book Description</label>
+        <textarea id="content-description" name="content-description" rows="5" placeholder="Write short description here..." required></textarea>
+
+        <label for="verification-code">Author Code</label>
+        <input type="text" id="verification-code" name="verification-code" placeholder="Enter the code" required>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<footer>
+    &copy; 2024 iUp 
+</footer>
+
+<script>
+    function showBooks() {
+        document.getElementById('books-container').style.display = 'grid';
+        document.getElementById('content-form').style.display = 'none';
+        displayBooks();
+    }
+
+    function showContentForm() {
+        document.getElementById('books-container').style.display = 'none';
+        document.getElementById('content-form').style.display = 'block';
+    }
+
+    function getBooks() {
+        return JSON.parse(localStorage.getItem('books')) || [];
+    }
+
+    function saveBook(book) {
+        const books = getBooks();
+        books.unshift(book); // Add new book to the beginning of the array
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    function displayBooks() {
+        const books = getBooks();
+        const booksContainer = document.getElementById('books-container');
+        booksContainer.innerHTML = '';
+
+        if (books.length === 0) {
+            const noBooksMessage = document.createElement('p');
+            noBooksMessage.textContent = 'No books available.';
+            booksContainer.appendChild(noBooksMessage);
+        } else {
+            books.forEach((book, index) => {
+                const listItem = document.createElement('div');
+                listItem.className = 'book-list-item';
+
+                const bookLink = document.createElement('a');
+                bookLink.href = book.url;
+                bookLink.target = '_blank'; // Opens link in new tab
+
+                const bookCover = document.createElement('img');
+                bookCover.src = book.cover;
+                bookCover.alt = `${book.title} Cover`;
+
+                const bookDetails = document.createElement('div');
+                bookDetails.className = 'book-details';
+
+                const bookTitle = document.createElement('h2');
+                bookTitle.textContent = book.title;
+
+                const bookDescription = document.createElement('p');
+                bookDescription.textContent = book.description;
+
+                bookLink.appendChild(bookCover);
+                bookDetails.appendChild(bookTitle);
+                bookDetails.appendChild(bookDescription);
+
+                listItem.appendChild(bookLink);
+                listItem.appendChild(bookDetails);
+
+                booksContainer.appendChild(listItem);
+            });
+        }
+    }
+
+    function publishContent(event) {
+    event.preventDefault();
+    
+    const verificationCode = document.getElementById('verification-code').value;
+    const correctCode = "112233";
+
+    if (verificationCode !== correctCode) {
+        alert("Incorrect verification code. Please try again.");
+        return;
+    }
+
+    const title = document.getElementById('content-title').value;
+    const url = document.getElementById('content-url').value;
+    const description = document.getElementById('content-description').value;
+    const coverInput = document.getElementById('content-cover');
+    const coverFile = coverInput.files[0];
+
+    const reader = new FileReader();
+    reader.onloadend = function() {
+        const cover = reader.result;
+        const book = { title, url, description, cover };
+        saveBook(book);
+        showBooks();
+    };
+    if (coverFile) {
+        reader.readAsDataURL(coverFile);
+    }
+}
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showBooks();
+    });
+</script>
+
+<script type='text/javascript' src='//pl23867251.highrevenuenetwork.com/f2/ae/d2/f2aed24143286211b0a1615dde288dac.js'></script></body>
+</html>
