@@ -3,270 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>YouTube Video Tasks</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            font-family: 'Helvetica Neue', sans-serif;
+            background: radial-gradient(circle, #4a90e2, #09D260);
+            color: #f1f1f1;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        header {
-            background-color: #2c3e50;
-            color: #fff;
-            padding: 10px 0;
+        .balance {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+        .video-task {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            max-width: 320px;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2em;
+        .video-task:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
         }
-        header h1 i {
-            margin-right: 10px;
+        iframe {
+            border: none;
+            border-radius: 0 0 12px 12px;
+            width: 100%;
+            height: 180px;
         }
-        nav {
-            background-color: #34495e;
+        .video-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 16px;
+            color: #333;
+        }
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 12px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1em;
-            cursor: pointer;
+        .lock-overlay.visible {
+            visibility: visible;
+            opacity: 1;
         }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .book-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 0;
-            list-style-type: none;
-        }
-        .book-list-item {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            transition: transform 0.2s ease-in-out;
-        }
-        .book-list-item:hover {
-            transform: scale(1.02);
-        }
-        .book-list-item a {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        .book-list-item img {
-            width: 100%;
-            height: auto;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-        .book-details {
-            padding: 15px;
-        }
-        .book-details h2 {
-            font-size: 1.2em;
-            margin: 0 0 10px 0;
-            color: #333;
-            text-align: center;
-        }
-        .book-details p {
-            margin: 5px 0;
-        }
-        footer {
-            background-color: #34495e;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-        .content-form {
-            margin-top: 20px;
-        }
-        .content-form label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .content-form input, .content-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .content-form button {
-            background-color: #2980b9;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .content-form button:hover {
-            background-color: #2471a3;
-        }
-        .content-cover {
-            margin-bottom: 10px;
+        .countdown {
+            margin-top: 16px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
+    <div class="balance">
+        <p>Balance: $<span id="balance">1.00</span></p>
+    </div>
 
-<header>
-    <h1><i class="fas fa-book"></i>Nainarh</h1>
-</header>
+    <div class="video-grid">
+        <!-- Video 1 -->
+        <div class="video-task" id="videoTask1">
+            <div id="player1"></div>
+            <p class="video-title">$0.10</p>
+            <div class="lock-overlay" id="lockOverlay1">
+                <div></div>
+                <div id="countdown1" class="countdown">00:00:00</div>
+            </div>
+        </div>
+        <!-- Video 2 -->
+        <div class="video-task" id="videoTask2">
+            <div id="player2"></div>
+            <p class="video-title">$0.10</p>
+            <div class="lock-overlay" id="lockOverlay2">
+                <div></div>
+                <div id="countdown2" class="countdown">00:00:00</div>
+            </div>
+        </div>
+        <!-- Video 3 -->
+        <div class="video-task" id="videoTask3">
+            <div id="player3"></div>
+            <p class="video-title">$0.10</p>
+            <div class="lock-overlay" id="lockOverlay3">
+                <div></div>
+                <div id="countdown3" class="countdown">00:00:00</div>
+            </div>
+        </div>
+    </div>
 
-<nav>
-    <a onclick="showBooks()"><i class="fas fa-th"></i> Library</a>
-    <a onclick="showContentForm()"><i class="fas fa-plus"></i> Author ✍️</a>
-</nav>
+    <html>
+    <style>
+        .payout-section {
+            background: linear-gradient(135deg, #09D260, #0033cc);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            color: #fff;
+        }
+        .payout-section h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .payout-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #dcdcdc;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .payout-form a.button {
+            background: #fffff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+        .payout-form a.button:hover {
+            background: #0056b3;
+            transform: translateY(-4px);
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 16px;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 
-<div class="container" id="books-container">
-    <!-- Books will be dynamically inserted here -->
-</div>
+    <!-- Payout Section -->
+    <div class="payout-section">
+        <h2>Daily Task</h2>
+        <p>Each task is a valuable asset</p>
+        <form id="payoutForm" class="payout-form">
+            <!-- Link styled as a button -->
+            <a href="https://t.me/Sweet_earn" class="button">Join Our TG Channel</a>
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
+    </html>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #09D260;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #FFFFFF; /* Yellow color for title */
+        }
+        
+        p {
+            color: #ccc;
+        }
+        
+        input {
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #09D26;
+            color: #000;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #09D26; /* Yellow background for button */
+            color: #ff; /* Black text color for button */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #FFFFFG; /* Darker yellow on hover */
+        }
+    </style>
+</head>
+<body>    
+    <h1>Invite Friends!</h1>
+    
+    <p></p>
+    
+    <input type="text" value="https://t.me/Sweet_earn_bot" id="inviteLink" aria-label="Invite link">
+    
+    <button onclick="copyLink()" aria-label="Copy invite link">Copy Link</button>
+    
+    <script>
+        function copyLink() {
+            var copyText = document.getElementById("inviteLink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
 
-<div class="container content-form" id="content-form" style="display: none;">
-    <h2>📑</h2>
-    <form onsubmit="publishContent(event)">
-        <label for="content-title">Book Title</label>
-        <input type="text" id="content-title" name="content-title" placeholder="Enter the book title" required>
-
-        <label for="content-url">Docs URL</label>
-        <input type="url" id="content-url" name="content-url" placeholder="Enter your docs link" required>
-
-        <label for="content-cover">Book Cover</label>
-        <input type="file" id="content-cover" name="content-cover" class="content-cover" accept="image/*" required>
-
-        <label for="content-description">Book Description</label>
-        <textarea id="content-description" name="content-description" rows="5" placeholder="Write short description here..." required></textarea>
-
-        <label for="verification-code">Author Code</label>
-        <input type="text" id="verification-code" name="verification-code" placeholder="Enter the code" required>
-
-        <button type="submit">Submit</button>
-    </form>
-</div>
-
-<footer>
-    &copy; 2024 iUp 
-</footer>
-
-<script>
-    function showBooks() {
-        document.getElementById('books-container').style.display = 'grid';
-        document.getElementById('content-form').style.display = 'none';
-        displayBooks();
-    }
-
-    function showContentForm() {
-        document.getElementById('books-container').style.display = 'none';
-        document.getElementById('content-form').style.display = 'block';
-    }
-
-    function getBooks() {
-        return JSON.parse(localStorage.getItem('books')) || [];
-    }
-
-    function saveBook(book) {
-        const books = getBooks();
-        books.unshift(book); // Add new book to the beginning of the array
-        localStorage.setItem('books', JSON.stringify(books));
-    }
-
-    function displayBooks() {
-        const books = getBooks();
-        const booksContainer = document.getElementById('books-container');
-        booksContainer.innerHTML = '';
-
-        if (books.length === 0) {
-            const noBooksMessage = document.createElement('p');
-            noBooksMessage.textContent = 'No books available.';
-            booksContainer.appendChild(noBooksMessage);
-        } else {
-            books.forEach((book, index) => {
-                const listItem = document.createElement('div');
-                listItem.className = 'book-list-item';
-
-                const bookLink = document.createElement('a');
-                bookLink.href = book.url;
-                bookLink.target = '_blank'; // Opens link in new tab
-
-                const bookCover = document.createElement('img');
-                bookCover.src = book.cover;
-                bookCover.alt = `${book.title} Cover`;
-
-                const bookDetails = document.createElement('div');
-                bookDetails.className = 'book-details';
-
-                const bookTitle = document.createElement('h2');
-                bookTitle.textContent = book.title;
-
-                const bookDescription = document.createElement('p');
-                bookDescription.textContent = book.description;
-
-                bookLink.appendChild(bookCover);
-                bookDetails.appendChild(bookTitle);
-                bookDetails.appendChild(bookDescription);
-
-                listItem.appendChild(bookLink);
-                listItem.appendChild(bookDetails);
-
-                booksContainer.appendChild(listItem);
+            navigator.clipboard.writeText(copyText.value).then(function() {
+                alert("Link copied to clipboard: " + copyText.value);
+            }).catch(function(err) {
+                console.error("Failed to copy: ", err);
             });
         }
+    </script>
+</body>
+</html>
+     <style>
+    .payout-section {
+        background: linear-gradient(135deg, #09D260, #0033cc);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        margin: 40px auto;
+        text-align: center;
+        color: #fff;
     }
-
-    function publishContent(event) {
-    event.preventDefault();
-    
-    const verificationCode = document.getElementById('verification-code').value;
-    const correctCode = "112233";
-
-    if (verificationCode !== correctCode) {
-        alert("Incorrect verification code. Please try again.");
-        return;
+    .payout-section h2 {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
-
-    const title = document.getElementById('content-title').value;
-    const url = document.getElementById('content-url').value;
-    const description = document.getElementById('content-description').value;
-    const coverInput = document.getElementById('content-cover');
-    const coverFile = coverInput.files[0];
-
-    const reader = new FileReader();
-    reader.onloadend = function() {
-        const cover = reader.result;
-        const book = { title, url, description, cover };
-        saveBook(book);
-        showBooks();
-    };
-    if (coverFile) {
-        reader.readAsDataURL(coverFile);
+    .payout-form label {
+        font-size: 18px;
+        display: block;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
-}
+    .payout-form input[type="text"],
+    .payout-form select {
+        width: 80%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .payout-form input[type="text"]::placeholder {
+        color: #aaa;
+    }
+    .payout-form button {
+        background: #1f8ef1;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .payout-form button:hover {
+        background: #0056b3;
+        transform: translateY(-4px);
+    }
+    .error-message {
+        color: #ff4d4f;
+        font-size: 16px;
+        margin-top: 20px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+</style>
 
-    document.addEventListener('DOMContentLoaded', () => {
-        showBooks();
-    });
-</script>
+<!-- Payout Section -->
+<div class="payout-section">
+        <h2>Airdrop</h2>
+        <form id="payoutForm" class="payout-form">
+            <select id="payoutMethod" required>
+                <option value="" disabled selected>Select Payment Method</option>
+                <option value="USDT (TRC20)">USDT (TRC20)</option>
+                <option value="Litecoin (LTC)">Litecoin (LTC)</option>
+            </select>
+            <input type="text" id="walletAddress" placeholder="Enter Your Wallet Address" required />
+            
+            <input type="submit" value="Send" />
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
+    </div>    
 
-<script type='text/javascript' src='//pl23875301.highrevenuenetwork.com/ce/83/76/ce8376d5dc6c7b86196792e9c14ec6fe.js'></script></body>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const balanceElement = document.getElementById('balance');
+
+        function loadBalance() {
+            const savedBalance = localStorage.getItem('balance');
+            return savedBalance ? parseFloat(savedBalance) : 1.00;
+        }
+
+        function saveBalance(balance) {
+            localStorage.setItem('balance', balance.toFixed(2));
+        }
+
+        function updateBalance(amount) {
+            let currentBalance = loadBalance();
+            currentBalance += amount;
+            saveBalance(currentBalance);
+            balanceElement.textContent = currentBalance.toFixed(2);
+        }
+
+        function loadLockStatus(videoId) {
+            const unlockTime = localStorage.getItem(`unlockTime_${videoId}`);
+            const now = new Date().getTime();
+
+            if (unlockTime && now < parseInt(unlockTime)) {
+                document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
+                startCountdown(parseInt(unlockTime), videoId);
+            }
+        }
+
+        function setLock(videoId) {
+            const now = new Date().getTime();
+            const unlockDate = new Date(now + 3 * 60 * 60 * 1000); // 3 hours
+            localStorage.setItem(`lastWatched_${videoId}`, now);
+            localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
+            document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
+            startCountdown(unlockDate.getTime(), videoId);
+        }
+
+        function startCountdown(endTime, videoId) {
+            function updateTimer() {
+                const now = new Date().getTime();
+                const timeRemaining = endTime - now;
+
+                if (timeRemaining <= 0) {
+                    document.getElementById(`lockOverlay${videoId}`).classList.remove('visible');
+                    clearInterval(timerInterval);
+                } else {
+                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                    document.getElementById(`countdown${videoId}`).textContent = 
+                        String(hours).padStart(2, '0') + ':' + 
+                        String(minutes).padStart(2, '0') + ':' + 
+                        String(seconds).padStart(2, '0');
+                }
+            }
+            updateTimer(); // initial call
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function onYouTubeIframeAPIReady() {
+            const videoIds = ['9hom7bzhnkk', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
+            videoIds.forEach((videoId, index) => {
+                new YT.Player(`player${index + 1}`, {
+                    height: '180',
+                    width: '100%',
+                    videoId: videoId,
+                    events: {
+                        'onStateChange': (event) => onPlayerStateChange(event, index + 1)
+                    }
+                });
+            });
+        }
+
+        function onPlayerStateChange(event, videoIndex) {
+            if (event.data == YT.PlayerState.ENDED) {
+                // Video has ended
+                updateBalance(0.10);
+                setLock(videoIndex);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            balanceElement.textContent = loadBalance().toFixed(2);
+            for (let i = 1; i <= 3; i++) {
+                loadLockStatus(i);
+            }
+        });
+    </script>
+</body>
 </html>
