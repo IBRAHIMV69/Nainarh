@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Helvetica Neue', sans-serif;
-            background: radial-gradient(circle, #4a90e2, #0033cc);
+            background: radial-gradient(circle, #4a90e2, #09D260);
             color: #f1f1f1;
             margin: 0;
             padding: 0;
@@ -123,28 +123,107 @@
                 <div id="countdown3" class="countdown">00:00:00</div>
             </div>
         </div>
-    <div class="post">
-        <p>This is a post below the balance section. You can add any text or content here, such as announcements, updates, or additional instructions for users.</p>
     </div>
 
-    <div class="video-grid">
-        <!-- Task 1 -->
-        <div class="video-task" id="videoTask1">
-            <p class="video-description">Description 1</p>
-            <button class="watch-button" onclick="watchVideo(1, 'https://www.example.com/video1')">Watch Video</button>
-            <div class="lock-overlay" id="lockOverlay1">
-                <div>Locked</div>
-                <div id="countdown1" class="countdown">00:00:00</div>
-            </div>
+    <html>
+    <style>
+        .payout-section {
+            background: linear-gradient(135deg, #09D260, #0033cc);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            color: #fff;
+        }
+        .payout-section h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .payout-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #dcdcdc;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .payout-form a.button {
+            background: #ffffff;
+            color: #000; /* Updated text color for contrast */
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+        .payout-form a.button:hover {
+            background: #0056b3;
+            color: #fff; /* Text color change on hover */
+            transform: translateY(-4px);
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 16px;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+
+    <body>
+        <!-- Payout Section -->
+        <div class="payout-section">
+            <h2>Airdrop</h2>
+            <p>Get your rewards instantly by clicking the send button below.</p>
+            <form id="payoutForm" class="payout-form">
+                <!-- Link styled as a button -->
+                <a href="#" class="button" onclick="handleClick()">Send</a>
+                <p id="errorMessage" class="error-message"></p>
+            </form>
         </div>
-    </div>
-    
-    
+
+        <script>
+            // Initialize variables
+            let clickCount = parseInt(localStorage.getItem('clickCount')) || 0;
+            let balance = parseInt(localStorage.getItem('balance')) || 1000;
+
+            function handleClick() {
+                // Increment the click count and increase the balance
+                clickCount++;
+                balance += 100; // Increase balance by 100 on each click
+
+                // Store the updated values in local storage
+                localStorage.setItem('clickCount', clickCount);
+                localStorage.setItem('balance', balance);
+
+                // Redirect to the URL
+                window.location.href = "https://example.com/airdrop";
+            }
+
+            // Check if the user is returning to the page and show the alert if needed
+            window.onload = function() {
+                if (localStorage.getItem('clickCount')) {
+                    alert("You have clicked the button " + clickCount + " times.\nYour current balance is: " + balance + " coins.");
+
+                    // Optionally, clear the stored values after showing the alert
+                    localStorage.removeItem('clickCount');
+                    localStorage.removeItem('balance');
+                }
+            };
+        </script>
+    </body>
+</html>
     
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #4a90e2;
+            background-color: #09D260;
             color: #fff;
             text-align: center;
             padding: 20px;
@@ -165,13 +244,13 @@
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #4a90e2;
-            color: #fff;
+            background-color: #09D26;
+            color: #000;
         }
         
         button {
             padding: 10px 20px;
-            background-color: #4a90e2; /* Yellow background for button */
+            background-color: #09D26; /* Yellow background for button */
             color: #ff; /* Black text color for button */
             border: none;
             border-radius: 5px;
@@ -188,7 +267,7 @@
     
     <p></p>
     
-    <input type="text" value="https://t.me/iUP_lion_head_Bot" id="inviteLink" aria-label="Invite link">
+    <input type="text" value="https://t.me/Sweet_earn_bot" id="inviteLink" aria-label="Invite link">
     
     <button onclick="copyLink()" aria-label="Copy invite link">Copy Link</button>
     
@@ -209,7 +288,7 @@
 </html>
      <style>
     .payout-section {
-        background: linear-gradient(135deg, #4a90e2, #0033cc);
+        background: linear-gradient(135deg, #09D260, #0033cc);
         padding: 40px;
         border-radius: 20px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -316,7 +395,7 @@
 
         function setLock(videoId) {
             const now = new Date().getTime();
-            const unlockDate = new Date(now + 2 * 60 * 60 * 1000); // 2 hours
+            const unlockDate = new Date(now + 3 * 60 * 60 * 1000); // 3 hours
             localStorage.setItem(`lastWatched_${videoId}`, now);
             localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
             document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
@@ -346,7 +425,7 @@
         }
 
         function onYouTubeIframeAPIReady() {
-            const videoIds = ['soehOiZMzjs', '9hom7bzhnkk?si=RMY1z3ijlVcVfgM2', 'QzBXXxMe9ZE?si=ahUbWBOZ1e-L8uoV']; // Replace with actual video IDs
+            const videoIds = ['9hom7bzhnkk', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
             videoIds.forEach((videoId, index) => {
                 new YT.Player(`player${index + 1}`, {
                     height: '180',
