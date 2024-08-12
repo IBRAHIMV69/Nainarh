@@ -126,194 +126,66 @@
     </div>
 
     <html>
-    <head>
-        <style>
-            .payout-section {
-                background: linear-gradient(135deg, #09D260, #0033cc);
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-                max-width: 600px;
-                margin: 40px auto;
-                text-align: center;
-                color: #fff;
-            }
-            .payout-section h2 {
-                font-size: 28px;
-                font-weight: bold;
-                margin-bottom: 15px;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            }
-            .payout-section p {
-                font-size: 18px;
-                margin-bottom: 30px;
-                color: #dcdcdc;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            }
-            .balance {
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 20px;
-                color: #fff;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            }
-            .payout-form a.button {
-                background: #009688;
-                color: #fff;
-                border: none;
-                border-radius: 10px;
-                padding: 15px 30px;
-                font-size: 18px;
-                font-weight: bold;
-                text-decoration: none;
-                display: inline-block;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-                transition: background 0.3s ease, transform 0.2s ease;
-                cursor: pointer;
-            }
-            .payout-form a.button.locked {
-                background: #999999; /* Gray color when locked */
-                cursor: not-allowed;
-                pointer-events: none; /* Disable clicking */
-            }
-            .error-message {
-                color: #ff4d4f;
-                font-size: 16px;
-                margin-top: 20px;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            }
-            .timer {
-                font-size: 20px;
-                color: #ffeb3b;
-                margin-top: 10px;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Payout Section -->
-        <div class="payout-section">
-            <h2>Airdrop</h2>
-            <p class="balance">Balance: <span id="balance">0</span></p>
-            <p>Get your rewards instantly by clicking the send button below.</p>
-            <form id="payoutForm" class="payout-form">
-                <!-- Link styled as a button -->
-                <a href="https://example.com/airdrop" class="button" id="payoutButton" onclick="handleButtonClick()">Send</a>
-                <p id="errorMessage" class="error-message"></p>
-                <p id="timer" class="timer"></p>
-            </form>
-        </div>
+    <style>
+        .payout-section {
+            background: linear-gradient(135deg, #09D260, #0033cc);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            color: #fff;
+        }
+        .payout-section h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .payout-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #dcdcdc;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .payout-form a.button {
+            background: #fffff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+        .payout-form a.button:hover {
+            background: #0056b3;
+            transform: translateY(-4px);
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 16px;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 
-        <script>
-            const oneHour = 60 * 60 * 1000;
-
-            function handleButtonClick() {
-                if (isButtonLocked()) {
-                    alert("Button is locked. Please try again later.");
-                    return false;
-                }
-                if (!isUrlVisited()) {
-                    alert("Please visit the URL before receiving your reward.");
-                    return false;
-                }
-                addBalance();
-                lockButton();
-                startCountdown(oneHour - (new Date().getTime() - getLockedTime()));
-                return true;
-            }
-
-            function addBalance() {
-                var balanceElement = document.getElementById("balance");
-                var currentBalance = parseInt(balanceElement.innerText);
-                var newBalance = currentBalance + 1;
-                balanceElement.innerText = newBalance;
-                localStorage.setItem("userBalance", newBalance); // Save balance to localStorage
-            }
-
-            function lockButton() {
-                var button = document.getElementById("payoutButton");
-                var currentTime = new Date().getTime();
-                localStorage.setItem("buttonLockedTime", currentTime);
-                button.classList.add("locked");
-                button.removeAttribute("href"); // Remove the href to prevent navigation
-                startCountdown(oneHour);
-            }
-
-            function isButtonLocked() {
-                var lockedTime = getLockedTime();
-                if (!lockedTime) {
-                    return false;
-                }
-                var currentTime = new Date().getTime();
-                if (currentTime - lockedTime >= oneHour) {
-                    unlockButton();
-                    return false;
-                }
-                return true;
-            }
-
-            function unlockButton() {
-                var button = document.getElementById("payoutButton");
-                button.classList.remove("locked");
-                button.setAttribute("href", "https://example.com/airdrop");
-                localStorage.removeItem("buttonLockedTime");
-                document.getElementById("timer").innerText = "";
-            }
-
-            function getLockedTime() {
-                return parseInt(localStorage.getItem("buttonLockedTime"));
-            }
-
-            function startCountdown(duration) {
-                var timerElement = document.getElementById("timer");
-                var endTime = new Date().getTime() + duration;
-
-                var interval = setInterval(function() {
-                    var now = new Date().getTime();
-                    var timeLeft = endTime - now;
-
-                    if (timeLeft <= 0) {
-                        clearInterval(interval);
-                        unlockButton();
-                        timerElement.innerText = "You can now click the button.";
-                    } else {
-                        var minutes = Math.floor(timeLeft / (1000 * 60));
-                        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                        timerElement.innerText = "Button will be unlocked in: " + minutes + "m " + seconds + "s";
-                    }
-                }, 1000);
-            }
-
-            function loadBalance() {
-                var balanceElement = document.getElementById("balance");
-                var savedBalance = localStorage.getItem("userBalance");
-                if (savedBalance) {
-                    balanceElement.innerText = savedBalance;
-                }
-            }
-
-            function isUrlVisited() {
-                return localStorage.getItem("urlVisited") === "true";
-            }
-
-            function markUrlVisited() {
-                localStorage.setItem("urlVisited", "true");
-            }
-
-            window.onload = function() {
-                loadBalance(); // Load balance from localStorage when the page loads
-                if (isButtonLocked()) {
-                    startCountdown(oneHour - (new Date().getTime() - getLockedTime()));
-                }
-            }
-
-            // Mark the URL as visited when the user clicks the link
-            document.getElementById("payoutButton").addEventListener("click", function() {
-                markUrlVisited();
-            });
-        </script>
-    </body>
-</html>
+    <!-- Payout Section -->
+    <div class="payout-section">
+        <h2>Daily Task</h2>
+        <p>Each task is a valuable asset</p>
+        <form id="payoutForm" class="payout-form">
+            <!-- Link styled as a button -->
+            <a href="https://t.me/Sweet_earn" class="button">Join Our TG Channel</a>
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
+    </html>
     
     <style>
         body {
