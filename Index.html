@@ -125,92 +125,212 @@
         </div>
     </div>
 
-    <html>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Tasks</title>
     <style>
-        .payout-section {
-            background: linear-gradient(135deg, #09D260, #0033cc);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            margin: 40px auto;
-            text-align: center;
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #09D260, #09D260);
             color: #fff;
-        }
-        .payout-section h2 {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         .balance {
-            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            margin: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            font-size: 26px;
             font-weight: bold;
-            margin-bottom: 20px;
-            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
-        .payout-section p {
+        .post {
+            text-align: center;
+            margin: 20px;
             font-size: 18px;
-            margin-bottom: 30px;
-            color: #dcdcdc;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        .payout-form a.button {
-            background: #09D260, #0033cc;
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+        .video-task {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 340px;
+        }
+        .video-task:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+        }
+        .video-description {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+        }
+        .watch-button {
+            padding: 12px 24px;
+            font-size: 20px;
+            font-weight: bold;
+            background: #ff416c;
             color: #fff;
             border: none;
-            border-radius: 10px;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease, transform 0.2s ease;
+            border-radius: 6px;
             cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        .payout-form a.button:hover {
-            background: #0056b3;
+        .watch-button:hover {
+            background-color: #ff4b2b;
+            transform: scale(1.05);
+        }
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
-            transform: translateY(-4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: bold;
+            border-radius: 12px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .error-message {
-            color: #ff4d4f;
-            font-size: 16px;
+        .lock-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        .countdown {
             margin-top: 20px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: 22px;
         }
     </style>
+</head>
+<body>
+    <div class="balance">
+        <p>🔑 <span id="balance">0</span></p>
+    </div>
 
-    <!-- Payout Section -->
-    <div class="payout-section">
-        <h2>Airdrop</h2>
-        <div class="balance">$0.01<span id="balance">0</span></div> <!-- Display balance below title -->
-        <p>Get your rewards instantly by clicking the button below.</p>
-        <form id="payoutForm" class="payout-form">
-            <!-- Link styled as a button -->
-            <a href="https://t.me/Sweet_earn" id="sendButton" class="button">Send</a>
-            <p id="errorMessage" class="error-message"></p>
-        </form>
+    <div class="post">
+        <p>This is a post below the balance section. You can add any text or content here, such as announcements, updates, or additional instructions for users.</p>
+    </div>
+
+    <div class="video-grid">
+        <!-- Task 1 -->
+        <div class="video-task" id="videoTask1">
+            <p class="video-description">Description 1</p>
+            <button class="watch-button" onclick="watchVideo(1, 'https://www.example.com/video1')">Watch Video</button>
+            <div class="lock-overlay" id="lockOverlay1">
+                <div>Locked</div>
+                <div id="countdown1" class="countdown">00:00:00</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Check if there's a balance in localStorage and set it
-        let balance = localStorage.getItem('balance') || 0;
-        document.getElementById('balance').innerText = balance;
+        const balanceElement = document.getElementById('balance');
 
         function loadBalance() {
             const savedBalance = localStorage.getItem('balance');
-            return savedBalance ? parseFloat(savedBalance) : 1.00;
+            return savedBalance ? parseFloat(savedBalance) : 1;
         }
 
-        // Add event listener to the button
-        document.getElementById('sendButton').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default link action
-            increaseBalance();
-            window.location.href = this.href; // Then, follow the link
+        function saveBalance(balance) {
+            localStorage.setItem('balance', balance.toFixed(2));
+        }
+
+        function updateBalance(amount) {
+            let currentBalance = loadBalance();
+            currentBalance += amount;
+            saveBalance(currentBalance);
+            balanceElement.textContent = currentBalance.toFixed(2);
+        }
+
+        function watchVideo(taskId, url) {
+            updateBalance(1);  // Adds 1 to the balance when the button is clicked
+            window.open(url, '_blank');  // Opens the video link in a new tab
+            setLock(taskId);
+        }
+
+        function loadLockStatus(taskId) {
+            const unlockTime = localStorage.getItem(`unlockTime_${taskId}`);
+            const now = new Date().getTime();
+
+            if (unlockTime && now < parseInt(unlockTime)) {
+                document.getElementById(`lockOverlay${taskId}`).classList.add('visible');
+                startCountdown(parseInt(unlockTime), taskId);
+            }
+        }
+
+        function setLock(taskId) {
+            const now = new Date().getTime();
+            const unlockDate = new Date(now + 24 * 60 * 60 * 1000); // 24 hours
+            localStorage.setItem(`lastWatched_${taskId}`, now);
+            localStorage.setItem(`unlockTime_${taskId}`, unlockDate.getTime());
+            document.getElementById(`lockOverlay${taskId}`).classList.add('visible');
+            startCountdown(unlockDate.getTime(), taskId);
+        }
+
+        function startCountdown(endTime, taskId) {
+            function updateTimer() {
+                const now = new Date().getTime();
+                const timeRemaining = endTime - now;
+
+                if (timeRemaining <= 0) {
+                    document.getElementById(`lockOverlay${taskId}`).classList.remove('visible');
+                    clearInterval(timerInterval);
+                } else {
+                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                    document.getElementById(`countdown${taskId}`).textContent = 
+                        String(hours).padStart(2, '0') + ':' + 
+                        String(minutes).padStart(2, '0') + ':' + 
+                        String(seconds).padStart(2, '0');
+                }
+            }
+            updateTimer(); // initial call
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            balanceElement.textContent = loadBalance().toFixed(2);
+            loadLockStatus(1);
         });
     </script>
+</body>
 </html>
     
     <style>
