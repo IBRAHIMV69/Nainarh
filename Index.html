@@ -464,6 +464,7 @@
         document.getElementById('customModal').style.display = 'none';
     });
 </script>
+    <html>
     <style>
         .payout-section {
             background: linear-gradient(135deg, #09D260, #0033cc);
@@ -511,20 +512,32 @@
             transform: translateY(-4px);
         }
         .payout-form a.youtube-button:hover {
-            background: #0c85d0;
+            background: #cc0000;
         }
         .payout-form a.telegram-button {
             background: #09D260, #0033cc; /* Telegram blue */
         }
         .payout-form a.telegram-button:hover {
-            background: #0c85d0; /* Darker blue on hover */
+            background: #007ab8; /* Darker blue on hover */
         }
         .payout-form a.x-button {
             background: #09D260, #0033cc; /* Twitter blue */
         }
         .payout-form a.x-button:hover {
-            background: #0c85d0; /* Darker blue on hover */
+            background: #09D260, #0033cc; /* Darker blue on hover */
         }
+        .payout-form a.instagram-button {
+    background: #09D260, #0033cc; /* Instagram Gradient Background */
+}
+.payout-form a.instagram-button:hover {
+    background: #E1306C; /* Darker shade on hover */
+}
+.payout-form a.facebook-button {
+    background: #09D260, #0033cc; /* Facebook Blue */
+}
+.payout-form a.facebook-button:hover {
+    background: #1558A4; /* Darker Blue on hover */
+}
         .error-message {
             color: #ff4d4f;
             font-size: 16px;
@@ -559,6 +572,20 @@
                 </svg>
                 Follow Our X Account 
             </a>
+            <!-- Instagram Button -->
+<a href="https://www.instagram.com/yourprofile" class="button instagram-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+        <path d="M12 2.163c3.18 0 3.562.012 4.821.07 1.17.059 1.892.253 2.332.438.524.22.917.487 1.293.854.376.375.633.768.854 1.293.186.44.379 1.162.438 2.332.059 1.259.07 1.641.07 4.821s-.012 3.562-.07 4.821c-.059 1.17-.253 1.892-.438 2.332-.22.524-.487.917-.854 1.293-.375.376-.768.633-1.293.854-.44.186-1.162.379-2.332.438-1.259.059-1.641.07-4.821.07s-3.562-.012-4.821-.07c-1.17-.059-1.892-.253-2.332-.438-.524-.22-.917-.487-1.293-.854-.376-.375-.633-.768-.854-1.293-.186-.44-.379-1.162-.438-2.332-.059-1.259-.07-1.641-.07-4.821s.012-3.562.07-4.821c.059-1.17.253-1.892.438-2.332.22-.524.487-.917.854-1.293.375-.376.768-.633 1.293-.854.44-.186 1.162-.379 2.332-.438 1.259-.059 1.641-.07 4.821-.07zm0-2.163c-3.212 0-3.607.014-4.877.07-1.292.059-2.182.25-2.94.496-.762.252-1.432.588-2.05 1.206-.618.618-.954 1.288-1.206 2.05-.246.758-.437 1.648-.496 2.94-.056 1.27-.07 1.665-.07 4.877s.014 3.607.07 4.877c.059 1.292.25 2.182.496 2.94.252.762.588 1.432 1.206 2.05.618.618 1.288.954 2.05 1.206.758.246 1.648.437 2.94.496 1.27.056 1.665.07 4.877.07s3.607-.014 4.877-.07c1.292-.059 2.182-.25 2.94-.496.762-.252 1.432-.588 2.05-1.206.618-.618.954-1.288 1.206-2.05.246-.758.437-1.648.496-2.94.056-1.27.07-1.665.07-4.877s-.014-3.607-.07-4.877c-.059-1.292-.25-2.182-.496-2.94-.252-.762-.588-1.432-1.206-2.05-.618-.618-1.288-.954-2.05-1.206-.758-.246-1.648-.437-2.94-.496-1.27-.056-1.665-.07-4.877-.07zm0 5.838a3.679 3.679 0 1 0 0 7.358 3.679 3.679 0 0 0 0-7.358zm0 5.957a2.278 2.278 0 1 1 0-4.557 2.278 2.278 0 0 1 0 4.557zm3.394-5.764a.829.829 0 1 1 .001-1.658.829.829 0 0 1-.001 1.658z"/>
+    </svg>
+    Follow Us on Instagram
+</a>
+<!-- Facebook Button -->
+<a href="https://www.facebook.com/yourprofile" class="button facebook-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.262 10.546h-2.177v-1.411c0-.505.14-.851.873-.851h1.292v-1.995h-1.732c-1.335 0-2.202.686-2.202 1.934v1.812h-1.383v1.995h1.383v4.776h2.682v-4.776h1.56l.232-1.995z"/>
+    </svg>
+    Follow Our Facebook Account 
+</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
