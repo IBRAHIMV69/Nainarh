@@ -94,6 +94,8 @@
     <div class="balance">
         <p>$<span id="balance">1.00</span></p>
     </div>
+    
+        <p></p>
 
     <div class="video-grid">
         <!-- Video 1 -->
@@ -101,7 +103,7 @@
             <div id="player1"></div>
             <p class="video-title">$1.00</p>
             <div class="lock-overlay" id="lockOverlay1">
-                <div></div>
+                <div>⏱️</div>
                 <div id="countdown1" class="countdown">00:00:00</div>
             </div>
         </div>
@@ -110,7 +112,7 @@
             <div id="player2"></div>
             <p class="video-title">$1.00</p>
             <div class="lock-overlay" id="lockOverlay2">
-                <div></div>
+                <div>⏱️</div>
                 <div id="countdown2" class="countdown">00:00:00</div>
             </div>
         </div>
@@ -119,7 +121,7 @@
             <div id="player3"></div>
             <p class="video-title">$1.00</p>
             <div class="lock-overlay" id="lockOverlay3">
-                <div></div>
+                <div>⏱️</div>
                 <div id="countdown3" class="countdown">00:00:00</div>
             </div>
         </div>
@@ -184,7 +186,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #068E41;
+            background-color: #058E41;
             color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -207,11 +209,11 @@
 <body>
     <!-- Payout Section -->
     <div class="payout-section">
-        <h2>AirDrop Tasks</h2>
-        <p>Get your key  by clicking the button below. You can get the Airdrop key as much for your clicking.</p>
+        <h2>AirDrop Keys</h2>
+        <p>Get key for visiting sites of advertisers.</p>
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
-            <a href="#" class="button" id="sendButton">Find your key</a>
+            <a href="#" class="button" id="sendButton">Start viewing</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -255,6 +257,172 @@
         // Function to close custom alert
         function closeAlert() {
             document.getElementById('customAlert').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airdrop Payout</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        .payout-section {
+            background: #09D260,#0033cc;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        .payout-section h2 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .diamond-balance {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #09D260;
+        }
+        .payout-section p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #aaa;
+        }
+        .payout-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .payout-form input[type="text"] {
+            background: #303030;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .payout-form input[type="text"]::placeholder {
+            color: #aaa;
+        }
+        .payout-form button {
+            background: linear-gradient(135deg, #09D260, #0056b3);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .payout-form button:hover {
+            background: linear-gradient(135deg, #08a34f, #0047a3);
+            transform: translateY(-2px);
+        }
+        .payout-form .goto-games {
+            background: linear-gradient(90deg, #ff7a00, #ff5200);
+            margin-top: 10px;
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Payout Section -->
+    <div class="payout-section">
+        <h2>Airdrop</h2>
+        <p id="diamondBalance" class="diamond-balance">Diamonds: 0</p>
+        <p>Get your rewards instantly by entering the code below.</p>
+        <form id="payoutForm" class="payout-form" action="javascript:void(0);">
+            <label for="codeInput"></label>
+            <input id="codeInput" type="text" name="code" placeholder="Enter the code">
+            <button type="button" onclick="redeemCode()">Redeem</button>
+            <button type="button" class="goto-games" onclick="goToGames()">Go to live</button>
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
+
+    <script>
+        const validCodes = ["181818", "181778", "567899", "233333"];
+        let diamondBalance = 0;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadDiamondBalance();
+        });
+
+        function loadDiamondBalance() {
+            const savedBalance = localStorage.getItem('diamondBalance');
+            diamondBalance = savedBalance ? parseInt(savedBalance) : 0;
+            document.getElementById('diamondBalance').textContent = `Diamonds: ${diamondBalance}`;
+        }
+
+        function saveDiamondBalance() {
+            localStorage.setItem('diamondBalance', diamondBalance);
+        }
+
+        function redeemCode() {
+            var codeInput = document.getElementById('codeInput');
+            var errorMessage = document.getElementById('errorMessage');
+            var diamondBalanceElement = document.getElementById('diamondBalance');
+            var code = codeInput.value.trim();
+
+            if (code === "") {
+                errorMessage.textContent = "Please enter a code.";
+                return;
+            }
+
+            if (validCodes.includes(code)) {
+                if (canRedeem(code)) {
+                    diamondBalance += 1; // Add 1 diamond to the balance
+                    saveDiamondBalance(); // Save the new balance in localStorage
+                    diamondBalanceElement.textContent = `Diamonds: ${diamondBalance}`;
+                    errorMessage.textContent = "Code redeemed successfully!";
+                    updateLastRedeemed(code);
+                    codeInput.value = ""; // Optionally clear the input field
+                } else {
+                    errorMessage.textContent = "This code has already been redeemed today.";
+                }
+            } else {
+                errorMessage.textContent = "Invalid code. Please try again.";
+            }
+        }
+
+        function canRedeem(code) {
+            const lastRedeemed = localStorage.getItem(`redeem_${code}`);
+            if (!lastRedeemed) {
+                return true;
+            }
+
+            const lastRedeemedDate = new Date(lastRedeemed);
+            const today = new Date();
+
+            return lastRedeemedDate.getDate() !== today.getDate() ||
+                   lastRedeemedDate.getMonth() !== today.getMonth() ||
+                   lastRedeemedDate.getFullYear() !== today.getFullYear();
+        }
+
+        function updateLastRedeemed(code) {
+            localStorage.setItem(`redeem_${code}`, new Date().toISOString());
+        }
+
+        function goToGames() {
+            window.location.href = "/games";
         }
     </script>
 </body>
@@ -305,9 +473,9 @@
 <body>    
     <h1>🎁 Friends!</h1>
     
-    <p>Your referral will earn you huge prizes. Copy the link below and share it.</p>
+    <p>Your referral will earn you huge prize. copy the link below and share it.</p>
     
-    <input type="text" value="https://t.me/Sweet_earn_bot" id="inviteLink" aria-label="Invite link">
+    <input type="text" value="https://t.me/Sweet_earn_bot/referral/9687" id="inviteLink" aria-label="Invite link">
     
     <button onclick="copyLink()" aria-label="Copy invite link">Copy Link</button>
     
@@ -422,7 +590,7 @@
         font-size: 16px;
     }
     .modal-content button:hover {
-        background-color: #007bff;
+        background-color: #0c85d0;
     }
 </style>
 
@@ -430,7 +598,7 @@
 <div class="payout-section">
     <h2>Airdrop</h2>
     <p class="balance">🔑<span id="balance">0</span></p>
-    <p>Find the key to withdraw your account balance instantly.</p>
+    <p>You must get key before you can withdrawal.</p>
     <form id="payoutForm" class="payout-form">
         <select id="payoutMethod" required>
             <option value="" disabled selected>Select Payment Method</option>
@@ -464,7 +632,6 @@
         document.getElementById('customModal').style.display = 'none';
     });
 </script>
-    <html>
     <style>
         .payout-section {
             background: linear-gradient(135deg, #09D260, #0033cc);
@@ -512,32 +679,20 @@
             transform: translateY(-4px);
         }
         .payout-form a.youtube-button:hover {
-            background: #cc0000;
+            background: #0c85d0;
         }
         .payout-form a.telegram-button {
             background: #09D260, #0033cc; /* Telegram blue */
         }
         .payout-form a.telegram-button:hover {
-            background: #007ab8; /* Darker blue on hover */
+            background: #0c85d0; /* Darker blue on hover */
         }
         .payout-form a.x-button {
             background: #09D260, #0033cc; /* Twitter blue */
         }
         .payout-form a.x-button:hover {
-            background: #09D260, #0033cc; /* Darker blue on hover */
+            background: #0c85d0; /* Darker blue on hover */
         }
-        .payout-form a.instagram-button {
-    background: #09D260, #0033cc; /* Instagram Gradient Background */
-}
-.payout-form a.instagram-button:hover {
-    background: #E1306C; /* Darker shade on hover */
-}
-.payout-form a.facebook-button {
-    background: #09D260, #0033cc; /* Facebook Blue */
-}
-.payout-form a.facebook-button:hover {
-    background: #1558A4; /* Darker Blue on hover */
-}
         .error-message {
             color: #ff4d4f;
             font-size: 16px;
@@ -566,26 +721,12 @@
                 Join Our Telegram Channel 
             </a>
             <!-- X Button -->
-            <a href="https://x.com/yourprofile" class="button x-button">
+            <a href="https://x.com/SweetEearn?t=1MXDDiBSkjP2uMg3YAAe4A&s=09" class="button x-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
                     <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.408 17.25l-4.248-4.283-4.283 4.283-1.157-1.157 4.283-4.283-4.283-4.248 1.157-1.157 4.283 4.283 4.248-4.283 1.157 1.157-4.283 4.283 4.283 4.283-1.157 1.157z"/>
                 </svg>
                 Follow Our X Account 
             </a>
-            <!-- Instagram Button -->
-<a href="https://www.instagram.com/yourprofile" class="button instagram-button">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-        <path d="M12 2.163c3.18 0 3.562.012 4.821.07 1.17.059 1.892.253 2.332.438.524.22.917.487 1.293.854.376.375.633.768.854 1.293.186.44.379 1.162.438 2.332.059 1.259.07 1.641.07 4.821s-.012 3.562-.07 4.821c-.059 1.17-.253 1.892-.438 2.332-.22.524-.487.917-.854 1.293-.375.376-.768.633-1.293.854-.44.186-1.162.379-2.332.438-1.259.059-1.641.07-4.821.07s-3.562-.012-4.821-.07c-1.17-.059-1.892-.253-2.332-.438-.524-.22-.917-.487-1.293-.854-.376-.375-.633-.768-.854-1.293-.186-.44-.379-1.162-.438-2.332-.059-1.259-.07-1.641-.07-4.821s.012-3.562.07-4.821c.059-1.17.253-1.892.438-2.332.22-.524.487-.917.854-1.293.375-.376.768-.633 1.293-.854.44-.186 1.162-.379 2.332-.438 1.259-.059 1.641-.07 4.821-.07zm0-2.163c-3.212 0-3.607.014-4.877.07-1.292.059-2.182.25-2.94.496-.762.252-1.432.588-2.05 1.206-.618.618-.954 1.288-1.206 2.05-.246.758-.437 1.648-.496 2.94-.056 1.27-.07 1.665-.07 4.877s.014 3.607.07 4.877c.059 1.292.25 2.182.496 2.94.252.762.588 1.432 1.206 2.05.618.618 1.288.954 2.05 1.206.758.246 1.648.437 2.94.496 1.27.056 1.665.07 4.877.07s3.607-.014 4.877-.07c1.292-.059 2.182-.25 2.94-.496.762-.252 1.432-.588 2.05-1.206.618-.618.954-1.288 1.206-2.05.246-.758.437-1.648.496-2.94.056-1.27.07-1.665.07-4.877s-.014-3.607-.07-4.877c-.059-1.292-.25-2.182-.496-2.94-.252-.762-.588-1.432-1.206-2.05-.618-.618-1.288-.954-2.05-1.206-.758-.246-1.648-.437-2.94-.496-1.27-.056-1.665-.07-4.877-.07zm0 5.838a3.679 3.679 0 1 0 0 7.358 3.679 3.679 0 0 0 0-7.358zm0 5.957a2.278 2.278 0 1 1 0-4.557 2.278 2.278 0 0 1 0 4.557zm3.394-5.764a.829.829 0 1 1 .001-1.658.829.829 0 0 1-.001 1.658z"/>
-    </svg>
-    Follow Us on Instagram
-</a>
-<!-- Facebook Button -->
-<a href="https://www.facebook.com/yourprofile" class="button facebook-button">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
-        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.262 10.546h-2.177v-1.411c0-.505.14-.851.873-.851h1.292v-1.995h-1.732c-1.335 0-2.202.686-2.202 1.934v1.812h-1.383v1.995h1.383v4.776h2.682v-4.776h1.56l.232-1.995z"/>
-    </svg>
-    Follow Our Facebook Account 
-</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -623,7 +764,7 @@
 
         function setLock(videoId) {
             const now = new Date().getTime();
-            const unlockDate = new Date(now + 0 * 00 * 00 * 0000); // 0 hours
+            const unlockDate = new Date(now + 22 * 60 * 60 * 1000); // 22 hours
             localStorage.setItem(`lastWatched_${videoId}`, now);
             localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
             document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
@@ -653,7 +794,7 @@
         }
 
         function onYouTubeIframeAPIReady() {
-            const videoIds = ['oX7yqzs2Xs0', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
+            const videoIds = ['PQtQz5t17eU', 'qzQvUKavtL0', 'ot4WNTK1ngY']; // Replace with actual video IDs
             videoIds.forEach((videoId, index) => {
                 new YT.Player(`player${index + 1}`, {
                     height: '180',
@@ -667,8 +808,8 @@
         }
 
         function onPlayerStateChange(event, videoIndex) {
-            if (event.data == YT.PlayerState. every 15 minutes) {
-                // Video has every 15 minutes 
+            if (event.data == YT.PlayerState.ENDED) {
+                // Video has ended
                 updateBalance(1.00);
                 setLock(videoIndex);
             }
