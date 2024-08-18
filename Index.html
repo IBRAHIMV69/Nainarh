@@ -88,6 +88,47 @@
             margin-top: 16px;
             font-size: 18px;
         }
+        .promo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #f1f1f1;
+}
+
+.promo-section input {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+    text-align: center;
+}
+
+.promo-section button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background: #4a90e2;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.promo-section button:hover {
+    background: #0033cc;
+}
+
+.promo-section p {
+    margin-top: 10px;
+    font-size: 16px;
+}
     </style>
 </head>
 <body>
@@ -124,6 +165,12 @@
                 <div>⏱️</div>
                 <div id="countdown3" class="countdown">00:00:00</div>
             </div>
+        </div>
+        <div class="promo-section">
+    <h2>Enter Promo Code</h2>
+    <input type="text" id="promoCodeInput" placeholder="Enter your promo code">
+    <button id="applyPromoBtn">Apply Code</button>
+    <p id="promoMessage"></p>
         </div>
     </div>
 
@@ -257,171 +304,6 @@
         // Function to close custom alert
         function closeAlert() {
             document.getElementById('customAlert').style.display = 'none';
-        }
-    </script>
-</body>
-</html>
-
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airdrop Payout</title>
-    <style>
-        body {
-            background-color: #ffffff;
-            font-family: Arial, sans-serif;
-            color: #fff;
-        }
-        .payout-section {
-            background: #09D260,#0033cc;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            margin: 40px auto;
-            text-align: center;
-        }
-        .payout-section h2 {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .diamond-balance {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #09D260;
-        }
-        .payout-section p {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: #aaa;
-        }
-        .payout-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .payout-form input[type="text"] {
-            background: #303030;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 15px;
-            width: 100%;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        .payout-form input[type="text"]::placeholder {
-            color: #aaa;
-        }
-        .payout-form button {
-            background: linear-gradient(135deg, #09D260, #0056b3);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 0;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-        .payout-form button:hover {
-            background: linear-gradient(135deg, #08a34f, #0047a3);
-            transform: translateY(-2px);
-        }
-        .payout-form .goto-games {
-            background: linear-gradient(90deg, #ff7a00, #ff5200);
-            margin-top: 10px;
-        }
-        .error-message {
-            color: #ff4d4f;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Payout Section -->
-    <div class="payout-section">
-        <p id="diamondBalance" class="diamond-balance">💎: 0</p>
-        <p>Get your rewards instantly by entering the code below.</p>
-        <form id="payoutForm" class="payout-form" action="javascript:void(0);">
-            <label for="codeInput"></label>
-            <input id="codeInput" type="text" name="code" placeholder="Enter the code">
-            <button type="button" onclick="redeemCode()">Redeem</button>
-            <button type="button" class="goto-games" onclick="goToGames()">Go to live</button>
-            <p id="errorMessage" class="error-message"></p>
-        </form>
-    </div>
-
-    <script>
-        const validCodes = ["181818", "181778", "567899", "233333"];
-        let diamondBalance = 0;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadDiamondBalance();
-        });
-
-        function loadDiamondBalance() {
-            const savedBalance = localStorage.getItem('diamondBalance');
-            diamondBalance = savedBalance ? parseInt(savedBalance) : 0;
-            document.getElementById('diamondBalance').textContent = `Diamonds: ${diamondBalance}`;
-        }
-
-        function saveDiamondBalance() {
-            localStorage.setItem('diamondBalance', diamondBalance);
-        }
-
-        function redeemCode() {
-            var codeInput = document.getElementById('codeInput');
-            var errorMessage = document.getElementById('errorMessage');
-            var diamondBalanceElement = document.getElementById('diamondBalance');
-            var code = codeInput.value.trim();
-
-            if (code === "") {
-                errorMessage.textContent = "Please enter a code.";
-                return;
-            }
-
-            if (validCodes.includes(code)) {
-                if (canRedeem(code)) {
-                    diamondBalance += 1; // Add 1 diamond to the balance
-                    saveDiamondBalance(); // Save the new balance in localStorage
-                    diamondBalanceElement.textContent = `Diamonds: ${diamondBalance}`;
-                    errorMessage.textContent = "Code redeemed successfully!";
-                    updateLastRedeemed(code);
-                    codeInput.value = ""; // Optionally clear the input field
-                } else {
-                    errorMessage.textContent = "This code has already been redeemed today.";
-                }
-            } else {
-                errorMessage.textContent = "Invalid code. Please try again.";
-            }
-        }
-
-        function canRedeem(code) {
-            const lastRedeemed = localStorage.getItem(`redeem_${code}`);
-            if (!lastRedeemed) {
-                return true;
-            }
-
-            const lastRedeemedDate = new Date(lastRedeemed);
-            const today = new Date();
-
-            return lastRedeemedDate.getDate() !== today.getDate() ||
-                   lastRedeemedDate.getMonth() !== today.getMonth() ||
-                   lastRedeemedDate.getFullYear() !== today.getFullYear();
-        }
-
-        function updateLastRedeemed(code) {
-            localStorage.setItem(`redeem_${code}`, new Date().toISOString());
-        }
-
-        function goToGames() {
-            window.location.href = "https://t.me/Sweet_earn";
         }
     </script>
 </body>
@@ -820,6 +702,25 @@
                 loadLockStatus(i);
             }
         });
+        document.getElementById('applyPromoBtn').addEventListener('click', () => {
+    const promoCode = document.getElementById('promoCodeInput').value.trim();
+    const validPromoCodes = ['11122', '11133', '11144', '11155', '11166'];
+    const today = new Date().toDateString();
+    const lastUsedDate = localStorage.getItem(`promo_${promoCode}_date`);
+    
+    if (validPromoCodes.includes(promoCode)) {
+        if (lastUsedDate === today) {
+            document.getElementById('promoMessage').textContent = 'This code has already been used today.';
+        } else {
+            updateBalance(2.00);
+            localStorage.setItem(`promo_${promoCode}_date`, today);
+            document.getElementById('promoMessage').textContent = 'Promo code applied successfully! $2.00 has been added to your balance.';
+        }
+    } else {
+        document.getElementById('promoMessage').textContent = 'Invalid promo code. Please try again.';
+    }
+    document.getElementById('promoCodeInput').value = '';
+});
     </script>
 </body>
 </html>
