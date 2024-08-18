@@ -102,7 +102,7 @@
             <p class="video-title">$1.00</p>
             <div class="lock-overlay" id="lockOverlay1">
                 <div></div>
-                <div id="countdown1" class="countdown">00:00:15</div>
+                <div id="countdown1" class="countdown">00:00:00</div>
             </div>
         </div>
         <!-- Video 2 -->
@@ -667,8 +667,8 @@
         }
 
         function onPlayerStateChange(event, videoIndex) {
-            if (event.data == YT.PlayerState.ENDED) {
-                // Video has ended
+            if (event.data == YT.PlayerState. 15 SECONDS) {
+                // Video has 15 seconds
                 updateBalance(1.00);
                 setLock(videoIndex);
             }
