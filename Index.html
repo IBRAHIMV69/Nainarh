@@ -115,14 +115,14 @@
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    background: #4a90e2;
+    background: #09D260 #0033cc;
     color: #fff;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
 .promo-section button:hover {
-    background: #0033cc;
+    background: #0c85d0;
 }
 
 .promo-section p {
@@ -167,9 +167,9 @@
             </div>
         </div>
         <div class="promo-section">
-    <h2>Enter Promo Code</h2>
-    <input type="text" id="promoCodeInput" placeholder="Enter your promo code">
-    <button id="applyPromoBtn">Apply Code</button>
+    <h2>Live Code</h2>
+    <input type="text" id="promoCodeInput" placeholder="Enter your code">
+    <button id="applyPromoBtn">Redeem</button>
     <p id="promoMessage"></p>
         </div>
     </div>
@@ -710,14 +710,14 @@
     
     if (validPromoCodes.includes(promoCode)) {
         if (lastUsedDate === today) {
-            document.getElementById('promoMessage').textContent = 'This code has already been used today.';
+            document.getElementById('promoMessage').textContent = '';
         } else {
             updateBalance(2.00);
             localStorage.setItem(`promo_${promoCode}_date`, today);
-            document.getElementById('promoMessage').textContent = 'Promo code applied successfully! $2.00 has been added to your balance.';
+            document.getElementById('promoMessage').textContent = '';
         }
     } else {
-        document.getElementById('promoMessage').textContent = 'Invalid promo code. Please try again.';
+        document.getElementById('promoMessage').textContent = '';
     }
     document.getElementById('promoCodeInput').value = '';
 });
