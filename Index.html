@@ -102,7 +102,7 @@
             <p class="video-title">$1.00</p>
             <div class="lock-overlay" id="lockOverlay1">
                 <div></div>
-                <div id="countdown1" class="countdown">00:00:00</div>
+                <div id="countdown1" class="countdown">00:002:00</div>
             </div>
         </div>
         <!-- Video 2 -->
@@ -623,7 +623,7 @@
 
         function setLock(videoId) {
             const now = new Date().getTime();
-            const unlockDate = new Date(now + 3 * 60 * 60 * 1000); // 3 hours
+            const unlockDate = new Date(now + 0 * 00 * 00 * 0000); // 0 hours
             localStorage.setItem(`lastWatched_${videoId}`, now);
             localStorage.setItem(`unlockTime_${videoId}`, unlockDate.getTime());
             document.getElementById(`lockOverlay${videoId}`).classList.add('visible');
@@ -653,7 +653,7 @@
         }
 
         function onYouTubeIframeAPIReady() {
-            const videoIds = ['9hom7bzhnkk', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
+            const videoIds = ['oX7yqzs2Xs0', 'ot4WNTK1ngY', 'ot4WNTK1ngY']; // Replace with actual video IDs
             videoIds.forEach((videoId, index) => {
                 new YT.Player(`player${index + 1}`, {
                     height: '180',
