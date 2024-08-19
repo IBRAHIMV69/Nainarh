@@ -167,7 +167,6 @@
             </div>
         </div>
         <div class="promo-section">
-    <h2></h2>
             <p>Watch live, get codes and earn</p>
     <input type="text" id="promoCodeInput" placeholder="Enter the code">
     <button id="applyPromoBtn">Redeem</button>
@@ -718,7 +717,7 @@
             document.getElementById('promoMessage').textContent = '';
         }
     } else {
-        document.getElementById('promoMessage').textContent = 'Done';
+        document.getElementById('promoMessage').textContent = '';
     }
     document.getElementById('promoCodeInput').value = '';
 });
