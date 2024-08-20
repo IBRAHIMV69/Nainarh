@@ -179,6 +179,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airdrop</title>
+    <style>
+        .payout-section {
+            background: linear-gradient(135deg, #09D260, #0033cc);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            color: #fff;
+        }
+        .payout-section h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .payout-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #dcdcdc;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .payout-form a.button {
+            background: #ffffff; /* Corrected color code */
+            color: #000; /* Changed to black for visibility */
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+        .payout-form a.button:hover {
+            background: #0056b3;
+            transform: translateY(-4px);
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 16px;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Payout Section -->
+    <div class="payout-section">
+        <h2>Airdrop</h2>
+        <p id="codeDisplay">Get your rewards instantly by clicking the send button below.</p>
+        <form id="payoutForm" class="payout-form">
+            <!-- Link styled as a button -->
+            <a href="https://example.com/airdrop" class="button" id="sendButton" target="_blank">10s</a>
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+    </div>
+
+    <script>
+        const codes = ["11122", "11133", "11144", "11155", "11166"];
+        const codeDisplay = document.getElementById('codeDisplay');
+        const sendButton = document.getElementById('sendButton');
+
+        let countdown = 10;
+        let countdownInterval;
+
+        function startCountdown() {
+            countdownInterval = setInterval(() => {
+                if (countdown > 0) {
+                    countdown--;
+                    sendButton.textContent = `${countdown}s`;
+                } else {
+                    clearInterval(countdownInterval);
+                    displayCode();
+                    sendButton.textContent = 'Claim Code'; // Change button text after countdown
+                }
+            }, 1000);
+        }
+
+        function displayCode() {
+            const randomIndex = Math.floor(Math.random() * codes.length);
+            codeDisplay.textContent = codes[randomIndex];
+        }
+
+        // Start the countdown when the page loads
+        window.onload = startCountdown;
+
+        // Handle button click
+        sendButton.addEventListener('click', function(event) {
+            if (countdown > 0) {
+                event.preventDefault(); // Prevent default link behavior
+            }
+        });
+    </script>
+</body>
+</html>
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payout Section</title>
     <style>
         .payout-section {
