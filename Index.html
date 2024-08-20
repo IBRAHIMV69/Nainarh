@@ -653,7 +653,7 @@
 
         function loadBalance() {
             const savedBalance = localStorage.getItem('balance');
-            return savedBalance ? parseFloat(savedBalance) : 1.00;
+            return savedBalance ? parseFloat(savedBalance) : 0;
         }
 
         function saveBalance(balance) {
@@ -725,7 +725,7 @@
         function onPlayerStateChange(event, videoIndex) {
             if (event.data == YT.PlayerState.ENDED) {
                 // Video has ended
-                updateBalance(1.00);
+                updateBalance(100,000);
                 setLock(videoIndex);
             }
         }
@@ -746,7 +746,7 @@
         if (lastUsedDate === today) {
             document.getElementById('promoMessage').textContent = '';
         } else {
-            updateBalance(2.00);
+            updateBalance(200,000);
             localStorage.setItem(`promo_${promoCode}_date`, today);
             document.getElementById('promoMessage').textContent = '';
         }
