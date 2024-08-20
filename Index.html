@@ -746,7 +746,7 @@
         if (lastUsedDate === today) {
             document.getElementById('promoMessage').textContent = '';
         } else {
-            updateBalance(200,000);
+            updateBalance(500);
             localStorage.setItem(`promo_${promoCode}_date`, today);
             document.getElementById('promoMessage').textContent = '';
         }
