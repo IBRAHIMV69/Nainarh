@@ -65,7 +65,7 @@
 
     <script>
         // Set the current redeem URL
-        const currentRedeemURL = "https://new-example.com/redeem";
+        const currentRedeemURL = "https://youtu.be/PQtQz5t17eU?si=J-E6tKLHdSzBMPBY";
 
         // Get the previously stored redeem URL
         const previousRedeemURL = localStorage.getItem('redeemURL');
@@ -74,7 +74,7 @@
         if (previousRedeemURL && previousRedeemURL !== currentRedeemURL) {
             localStorage.removeItem('adsVisited'); // Reset the adsVisited flag
             const redeemBtn = document.getElementById('redeemBtn');
-            redeemBtn.innerHTML += '<span class="notification-badge">New</span>';
+            redeemBtn.innerHTML += '<span class="notification-badge"></span>';
         }
 
         // Update the stored redeem URL in local storage
