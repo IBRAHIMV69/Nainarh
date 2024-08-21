@@ -6,9 +6,9 @@
     <title>Airdrop Payout</title>
     <style>
         body {
-            background-color: #ffffff;
-            font-family: Arial, sans-serif;
-            color: #000;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
             margin: 0;
             padding: 0;
         }
@@ -16,62 +16,64 @@
             max-width: 600px;
             margin: 40px auto;
             padding: 20px;
-            background-color: #f7f7f7;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
         .post-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #e9e9e9;
-            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
             color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .post-section h2 {
-            margin: 0 0 10px;
-            font-size: 20px;
+            margin: 0 0 15px;
+            font-size: 24px;
+            color: #0072ff;
         }
         .post-section p {
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
         }
         .button-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 400px;
-            margin: 0 auto;
+            text-align: center;
         }
-        .button-container button {
-            background: linear-gradient(135deg, #09D260, #0056b3);
+        .payout-form button {
+            background: linear-gradient(135deg, #f7797d, #FBD786, #C6CEFF);
             color: #fff;
             border: none;
-            border-radius: 10px;
-            padding: 10px 0;
+            border-radius: 12px;
+            padding: 15px 0;
             width: 100%;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            margin-bottom: 15px;
             position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .button-container button:hover {
-            background: linear-gradient(135deg, #08a34f, #0047a3);
-            transform: translateY(-2px);
+        .payout-form button:hover {
+            background: linear-gradient(135deg, #f7797d, #FBD786, #C6CEFF);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
-        .goto-games {
-            background: linear-gradient(90deg, #ff7a00, #ff5200);
+        .payout-form .goto-games {
+            background: linear-gradient(135deg, #ff7a00, #ff5200);
         }
         .notification-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: red;
-            color: white;
+            top: -5px;
+            right: -5px;
+            background-color: #ff0000;
+            color: #ffffff;
             border-radius: 50%;
-            padding: 4px 8px;
-            font-size: 12px;
+            padding: 6px 12px;
+            font-size: 14px;
             font-weight: bold;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -85,15 +87,14 @@
 
         <!-- Button Container -->
         <div class="button-container">
-            <a href="javascript:void(0);" id="redeemLink">
-                <button type="button" id="redeemBtn">Redeem</button>
-            </a>
-            <a href="https://example.com/games" target="_blank" id="adsLink">
-                <button type="button" class="goto-games">Ads</button>
-            </a>
-            <!-- Add additional buttons here -->
-            <button type="button">Button 3</button>
-            <button type="button">Button 4</button>
+            <form id="payoutForm" class="payout-form" action="javascript:void(0);">
+                <a href="javascript:void(0);" id="redeemLink">
+                    <button type="button" id="redeemBtn">Redeem</button>
+                </a>
+                <a href="https://example.com/games" target="_blank" id="adsLink">
+                    <button type="button" class="goto-games">Ads</button>
+                </a>
+            </form>
         </div>
     </div>
 
