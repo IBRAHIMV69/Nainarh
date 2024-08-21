@@ -43,9 +43,9 @@
             right: -10px;
             background-color: red;
             color: white;
-            border-radius: 10%;
+            border-radius: 50%;
             padding: 4px 8px;
-            font-size: 8px;
+            font-size: 12px;
             font-weight: bold;
         }
     </style>
@@ -65,7 +65,7 @@
 
     <script>
         // Set the current redeem URL
-        const currentRedeemURL = "https://youtu.be/sPJf5cZZfZQ?si=SjbKq-2Q6jRPctln";
+        const currentRedeemURL = "https://new-example.com/redeem";
 
         // Get the previously stored redeem URL
         const previousRedeemURL = localStorage.getItem('redeemURL');
@@ -74,7 +74,7 @@
         if (previousRedeemURL && previousRedeemURL !== currentRedeemURL) {
             localStorage.removeItem('adsVisited'); // Reset the adsVisited flag
             const redeemBtn = document.getElementById('redeemBtn');
-            redeemBtn.innerHTML += '<span class="notification-badge">New Code</span>';
+            redeemBtn.innerHTML += '<span class="notification-badge">New</span>';
         }
 
         // Update the stored redeem URL in local storage
@@ -89,11 +89,6 @@
             // Check if the key exists in the local storage
             if (localStorage.getItem('adsVisited') === 'true') {
                 // If the key exists, allow redemption
-                // Remove the notification badge
-                const notificationBadge = document.querySelector('.notification-badge');
-                if (notificationBadge) {
-                    notificationBadge.remove();
-                }
                 // Redirect to the redeem URL
                 window.location.href = currentRedeemURL;
             } else {
