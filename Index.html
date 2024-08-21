@@ -36,12 +36,13 @@
             font-size: 16px;
         }
         .button-container {
-            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
             max-width: 400px;
             margin: 0 auto;
-            text-align: center;
         }
-        .payout-form button {
+        .button-container button {
             background: linear-gradient(135deg, #09D260, #0056b3);
             color: #fff;
             border: none;
@@ -52,14 +53,13 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
-            margin-bottom: 10px;
             position: relative;
         }
-        .payout-form button:hover {
+        .button-container button:hover {
             background: linear-gradient(135deg, #08a34f, #0047a3);
             transform: translateY(-2px);
         }
-        .payout-form .goto-games {
+        .goto-games {
             background: linear-gradient(90deg, #ff7a00, #ff5200);
         }
         .notification-badge {
@@ -85,21 +85,15 @@
 
         <!-- Button Container -->
         <div class="button-container">
-            <form id="payoutForm" class="payout-form" action="javascript:void(0);">
-                <a href="javascript:void(0);" id="redeemLink">
-                    <button type="button" id="redeemBtn">Redeem</button>
-                </a>
-                <a href="https://example.com/games" target="_blank" id="adsLink">
-                    <button type="button" class="goto-games">Ads</button>
-                </a>
-                <!-- Additional Buttons -->
-                <a href="https://example.com/another-action" target="_blank">
-                    <button type="button">Another Action</button>
-                </a>
-                <a href="https://example.com/more-info" target="_blank">
-                    <button type="button">More Info</button>
-                </a>
-            </form>
+            <a href="javascript:void(0);" id="redeemLink">
+                <button type="button" id="redeemBtn">Redeem</button>
+            </a>
+            <a href="https://example.com/games" target="_blank" id="adsLink">
+                <button type="button" class="goto-games">Ads</button>
+            </a>
+            <!-- Add additional buttons here -->
+            <button type="button">Button 3</button>
+            <button type="button">Button 4</button>
         </div>
     </div>
 
