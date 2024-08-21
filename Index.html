@@ -64,18 +64,15 @@
     </div>
 
     <script>
-        // Set the initial redeem URL
+        // Set the initial redeem URL and update flag
         let redeemURL = "https://example.com/redeem";
+        const isURLUpdated = true; // Set this to true when the URL is updated
 
-        // Simulate updating the URL dynamically
-        setTimeout(function() {
-            // Update the URL
-            redeemURL = "https://new-example.com/redeem";
-
-            // Add a notification badge to the button
+        // Show notification if the URL has been updated
+        if (isURLUpdated) {
             const redeemBtn = document.getElementById('redeemBtn');
             redeemBtn.innerHTML += '<span class="notification-badge">New</span>';
-        }, 5000); // Change the URL after 5 seconds for demonstration purposes
+        }
 
         document.getElementById('adsLink').addEventListener('click', function() {
             // Store a key in the local storage when the "Ads" button is clicked
@@ -86,10 +83,16 @@
             // Check if the key exists in the local storage
             if (localStorage.getItem('adsVisited') === 'true') {
                 // If the key exists, allow redemption
+                // Remove the notification badge
+                const notificationBadge = document.querySelector('.notification-badge');
+                if (notificationBadge) {
+                    notificationBadge.remove();
+                }
+                // Redirect to the redeem URL
                 window.location.href = redeemURL;
             } else {
                 // If the key does not exist, alert the user
-                alert('You must visit the Ads page first before you can visit the redeem page!');
+                alert('You must visit the Ads page first!');
             }
         });
     </script>
