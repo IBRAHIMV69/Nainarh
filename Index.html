@@ -74,7 +74,7 @@
         if (previousRedeemURL && previousRedeemURL !== currentRedeemURL) {
             localStorage.removeItem('adsVisited'); // Reset the adsVisited flag
             const redeemBtn = document.getElementById('redeemBtn');
-            redeemBtn.innerHTML += '<span class="notification-badge"></span>';
+            redeemBtn.innerHTML += '<span class="notification-badge">New Code</span>';
         }
 
         // Update the stored redeem URL in local storage
