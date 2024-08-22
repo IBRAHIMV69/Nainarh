@@ -54,6 +54,12 @@
             margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+        .countdown {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-top: 20px;
+        }
     </style>
 
     <!-- Payout Section -->
@@ -61,9 +67,10 @@
         <h2>Airdrop</h2>
         <div id="codeContainer" class="code"></div> <!-- Code will be displayed here -->
         <p>Get your rewards instantly by clicking the send button below.</p>
+        <div id="countdown" class="countdown"></div> <!-- Countdown timer -->
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
-            <a href="https://example.com/airdrop" class="button" onclick="startCountdown()">Send</a>
+            <a href="https://example.com/airdrop" class="button" onclick="handleClick(event)">Send</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -71,45 +78,44 @@
     <script>
         // Codes array
         const codes = ["111222", "111333", "111444", "111555", "111666"];
-        let countdownTimer;
-
-        // Function to start the countdown
-        function startCountdown() {
-            const startTime = Date.now();
-            localStorage.setItem('countdownStart', startTime);
-
-            countdownTimer = setTimeout(() => {
-                localStorage.removeItem('countdownStart');
-                prepareNextCode();
-            }, 15000); // 15 seconds
+        
+        // Handle the "Send" button click
+        function handleClick(event) {
+            event.preventDefault(); // Prevent default link behavior
+            prepareNextCode(); // Prepare and save the next code
+            startCountdown(); // Start countdown and redirect after 15 seconds
         }
 
         // Function to prepare and save the next code
         function prepareNextCode() {
-            const countdownStart = localStorage.getItem('countdownStart');
-            if (countdownStart) {
-                const elapsed = Date.now() - parseInt(countdownStart);
-                if (elapsed < 15000) {
-                    let currentIndex = localStorage.getItem('currentIndex');
-                    if (currentIndex === null) {
-                        currentIndex = 0; // Start with the first code
-                    } else {
-                        currentIndex = parseInt(currentIndex);
-                    }
-
-                    // Get the current code to show and save it in local storage
-                    const currentCode = codes[currentIndex];
-                    localStorage.setItem('currentCode', currentCode);
-                    
-                    // Update the index for the next visit
-                    currentIndex = (currentIndex + 1) % codes.length;
-                    localStorage.setItem('currentIndex', currentIndex);
-
-                    // Display the current code
-                    document.getElementById('codeContainer').innerText = currentCode;
-                }
-                localStorage.removeItem('countdownStart');
+            let currentIndex = localStorage.getItem('currentIndex');
+            if (currentIndex === null) {
+                currentIndex = 0; // Start with the first code
+            } else {
+                currentIndex = parseInt(currentIndex);
             }
+
+            // Get the current code to show and save it in local storage
+            const currentCode = codes[currentIndex];
+            localStorage.setItem('currentCode', currentCode);
+            
+            // Update the index for the next visit
+            currentIndex = (currentIndex + 1) % codes.length;
+            localStorage.setItem('currentIndex', currentIndex);
+        }
+
+        // Function to start countdown and redirect
+        function startCountdown() {
+            let countdown = 15; // Countdown duration in seconds
+            const countdownElement = document.getElementById('countdown');
+            const interval = setInterval(function() {
+                countdownElement.innerText = `Redirecting in ${countdown} seconds...`;
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(interval);
+                    window.location.href = 'https://example.com/airdrop'; // Redirect URL
+                }
+            }, 1000); // Update every second
         }
 
         // Display the code stored in local storage
@@ -118,12 +124,6 @@
             if (currentCode) {
                 document.getElementById('codeContainer').innerText = currentCode;
             }
-        };
-
-        // Clear local storage and timer on page unload
-        window.onbeforeunload = function() {
-            clearTimeout(countdownTimer);
-            localStorage.removeItem('countdownStart');
         };
     </script>
 </html>
