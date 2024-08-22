@@ -23,7 +23,7 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         .payout-form a.button {
-            background: #ffffff;
+            background: #ffffff; /* Fixed the color to white */
             color: #fff;
             border: none;
             border-radius: 10px;
@@ -46,49 +46,56 @@
             margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: #ffd700;
+        }
     </style>
 
     <!-- Payout Section -->
     <div class="payout-section">
         <h2>Airdrop</h2>
-        <!-- Placeholder for the code -->
-        <div id="codeDisplay" style="font-size: 24px; margin-bottom: 20px;"></div>
         <p>Get your rewards instantly by clicking the send button below.</p>
+        <div id="codeContainer" class="code"></div> <!-- Code will be displayed here -->
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
-            <a href="https://example.com/airdrop" class="button">Send</a>
+            <a href="https://example.com/airdrop" class="button" onclick="showCode()">Send</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
 
     <script>
-        // List of codes
+        // Codes array
         const codes = ["111222", "111333", "111444", "111555", "111666"];
-
-        // Function to display the code
-        function displayCode() {
-            // Remove any previously saved code when the page loads
-            localStorage.removeItem('airdropCode');
-
-            // Randomly select a new code
-            const randomCode = codes[Math.floor(Math.random() * codes.length)];
+        
+        // Function to show code
+        function showCode() {
+            const visited = localStorage.getItem('visited');
+            let currentCode = localStorage.getItem('currentCode');
             
-            // Display the new code
-            document.getElementById('codeDisplay').innerText = `Your Code: ${randomCode}`;
-            
-            // Save the code to local storage
-            localStorage.setItem('airdropCode', randomCode);
+            if (!visited) {
+                // Pick a random code from the list
+                const randomIndex = Math.floor(Math.random() * codes.length);
+                currentCode = codes[randomIndex];
+
+                // Save to local storage
+                localStorage.setItem('visited', true);
+                localStorage.setItem('currentCode', currentCode);
+            }
+
+            // Display the code
+            document.getElementById('codeContainer').innerText = currentCode;
         }
 
-        // Call the displayCode function only if the user has visited the page
+        // Check if the page was visited before
         window.onload = function() {
-            if (document.referrer !== "") {
-                // Show the code if the page is accessed by visiting (not directly)
-                displayCode();
-            } else {
-                // Ensure that no code is shown if the page is accessed directly
-                document.getElementById('codeDisplay').innerText = 'Please visit the page to see your code.';
+            const currentCode = localStorage.getItem('currentCode');
+            if (currentCode) {
+                document.getElementById('codeContainer').innerText = currentCode;
             }
-        };
+        }
     </script>
 </html>
