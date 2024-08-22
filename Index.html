@@ -376,6 +376,7 @@
 </body>
 </html>
      <style>
+    /* Your existing styles */
     .payout-section {
         background: linear-gradient(135deg, #09D260, #0033cc);
         padding: 40px;
@@ -434,18 +435,18 @@
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
     .connection-message {
-    color: #ffffff; /* Green color for success message */
-    font-size: 16px;
-    margin-top: 10px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
+        color: #ffffff; /* Green color for success message */
+        font-size: 16px;
+        margin-top: 10px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
 </style>
 
 <!-- Payout Section -->
 <div class="payout-section">
     <h2>Airdrop</h2>
-    <p class="post"><span id="post">0</span></p>
-    <p id="statusMessage" class="status-message"></p> <!-- Added status message paragraph -->
+    <p id="walletAddressDisplay" class="connection-message"></p> <!-- Display wallet address here -->
+    <p id="statusMessage" class="connection-message"></p> <!-- Display connection status here -->
     <form id="payoutForm" class="payout-form">
         <input type="text" id="walletAddress" placeholder="Enter Your Ton Address" required />
         <button type="submit">Send request</button>
@@ -463,7 +464,7 @@ window.addEventListener('load', function() {
         const truncatedAddress = savedAddress.length > 10 
             ? savedAddress.substring(0, 4) + '...' + savedAddress.substring(savedAddress.length - 4) 
             : savedAddress;
-        document.getElementById('balance').innerHTML = `${truncatedAddress}`;
+        document.getElementById('walletAddressDisplay').innerHTML = `${truncatedAddress}`;
     }
 
     if (connectionStatus) {
@@ -482,15 +483,16 @@ document.getElementById('payoutForm').addEventListener('submit', function(event)
         ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4) 
         : walletAddress;
     
-    // Update balance display with truncated address
-    document.getElementById('balance').innerHTML = `${truncatedAddress}`;
+    // Update display with truncated address
+    document.getElementById('walletAddressDisplay').innerHTML = `${truncatedAddress}`;
     
     // Save wallet address and connection status in local storage
     localStorage.setItem('walletAddress', walletAddress);
-    localStorage.setItem('connectionStatus', 'Your TON wallet is connected');
+    const statusMessage = 'Your TON wallet is connected';
+    localStorage.setItem('connectionStatus', statusMessage);
     
     // Display the connection status message
-    document.getElementById('statusMessage').innerHTML = 'Your TON wallet is connected';
+    document.getElementById('statusMessage').innerHTML = statusMessage;
 });
 </script>
     <style>
