@@ -660,6 +660,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('promoCodeInput').value = '';
 });
+            // Load saved wallet address and connection status from local storage if available
+window.addEventListener('load', function() {
+    const savedAddress = localStorage.getItem('walletAddress');
+    const connectionStatus = localStorage.getItem('connectionStatus');
+
+    if (savedAddress) {
+        const truncatedAddress = savedAddress.length > 10 
+            ? savedAddress.substring(0, 4) + '...' + savedAddress.substring(savedAddress.length - 4) 
+            : savedAddress;
+        document.getElementById('walletAddressDisplay').innerHTML = `${truncatedAddress}`;
+    }
+
+    if (connectionStatus) {
+        document.getElementById('statusMessage').innerHTML = connectionStatus;
+    }
+});
+
+document.getElementById('payoutForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    
+    // Get wallet address
+    const walletAddress = document.getElementById('walletAddress').value;
+    
+    // Truncate wallet address
+    const truncatedAddress = walletAddress.length > 10 
+        ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4) 
+        : walletAddress;
+    
+    // Update display with truncated address
+    document.getElementById('walletAddressDisplay').innerHTML = `${truncatedAddress}`;
+    
+    // Save wallet address and connection status in local storage
+    localStorage.setItem('walletAddress', walletAddress);
+    const statusMessage = 'Your TON wallet is connected';
+    localStorage.setItem('connectionStatus', statusMessage);
+    
+    // Display the connection status message
+    document.getElementById('statusMessage').innerHTML = statusMessage;
+});
     </script>
 </body>
 </html>
