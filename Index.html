@@ -16,6 +16,14 @@
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: #ffd700;
+        }
         .payout-section p {
             font-size: 18px;
             margin-bottom: 30px;
@@ -46,23 +54,16 @@
             margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        .code {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            color: #ffd700;
-        }
     </style>
 
     <!-- Payout Section -->
     <div class="payout-section">
         <h2>Airdrop</h2>
-        <p>Get your rewards instantly by clicking the send button below.</p>
         <div id="codeContainer" class="code"></div> <!-- Code will be displayed here -->
+        <p>Get your rewards instantly by clicking the send button below.</p>
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
-            <a href="https://example.com/airdrop" class="button" onclick="showCode()">Send</a>
+            <a href="https://example.com/airdrop" class="button" onclick="startCountdown()">Send</a>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -70,32 +71,59 @@
     <script>
         // Codes array
         const codes = ["111222", "111333", "111444", "111555", "111666"];
-        
-        // Function to show code
-        function showCode() {
-            const visited = localStorage.getItem('visited');
-            let currentCode = localStorage.getItem('currentCode');
-            
-            if (!visited) {
-                // Pick a random code from the list
-                const randomIndex = Math.floor(Math.random() * codes.length);
-                currentCode = codes[randomIndex];
+        let countdownTimer;
 
-                // Save to local storage
-                localStorage.setItem('visited', true);
-                localStorage.setItem('currentCode', currentCode);
-            }
+        // Function to start the countdown
+        function startCountdown() {
+            const startTime = Date.now();
+            localStorage.setItem('countdownStart', startTime);
 
-            // Display the code
-            document.getElementById('codeContainer').innerText = currentCode;
+            countdownTimer = setTimeout(() => {
+                localStorage.removeItem('countdownStart');
+                prepareNextCode();
+            }, 15000); // 15 seconds
         }
 
-        // Check if the page was visited before
+        // Function to prepare and save the next code
+        function prepareNextCode() {
+            const countdownStart = localStorage.getItem('countdownStart');
+            if (countdownStart) {
+                const elapsed = Date.now() - parseInt(countdownStart);
+                if (elapsed < 15000) {
+                    let currentIndex = localStorage.getItem('currentIndex');
+                    if (currentIndex === null) {
+                        currentIndex = 0; // Start with the first code
+                    } else {
+                        currentIndex = parseInt(currentIndex);
+                    }
+
+                    // Get the current code to show and save it in local storage
+                    const currentCode = codes[currentIndex];
+                    localStorage.setItem('currentCode', currentCode);
+                    
+                    // Update the index for the next visit
+                    currentIndex = (currentIndex + 1) % codes.length;
+                    localStorage.setItem('currentIndex', currentIndex);
+
+                    // Display the current code
+                    document.getElementById('codeContainer').innerText = currentCode;
+                }
+                localStorage.removeItem('countdownStart');
+            }
+        }
+
+        // Display the code stored in local storage
         window.onload = function() {
             const currentCode = localStorage.getItem('currentCode');
             if (currentCode) {
                 document.getElementById('codeContainer').innerText = currentCode;
             }
-        }
+        };
+
+        // Clear local storage and timer on page unload
+        window.onbeforeunload = function() {
+            clearTimeout(countdownTimer);
+            localStorage.removeItem('countdownStart');
+        };
     </script>
 </html>
