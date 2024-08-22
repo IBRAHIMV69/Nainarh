@@ -539,6 +539,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('promoCodeInput').value = '';
 });
+        // Codes array
+        const codes = ["111222", "111333", "111444", "111555", "111666"];
+        
+        // Function to handle the button click
+        function handleButtonClick() {
+            let currentIndex = localStorage.getItem('currentIndex');
+            if (currentIndex === null) {
+                currentIndex = 0; // Start with the first code if no index is stored
+            } else {
+                currentIndex = parseInt(currentIndex);
+            }
+
+            // Get the current code to show and save it in local storage
+            const currentCode = codes[currentIndex];
+            localStorage.setItem('currentCode', currentCode);
+            
+            // Update the index for the next visit
+            currentIndex = (currentIndex + 1) % codes.length;
+            localStorage.setItem('currentIndex', currentIndex);
+        }
+
+        // Display the code stored in local storage on page load
+        window.onload = function() {
+            const currentCode = localStorage.getItem('currentCode');
+            if (currentCode) {
+                document.getElementById('codeContainer').innerText = currentCode;
+            } else {
+                // Clear the code container if no code is available
+                document.getElementById('codeContainer').innerText = '';
+            }
+        };
+        
             // Load saved wallet address and connection status from local storage if available
 window.addEventListener('load', function() {
     const savedAddress = localStorage.getItem('walletAddress');
