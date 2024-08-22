@@ -257,7 +257,6 @@
         <form id="payoutForm" class="payout-form">
             <!-- Link styled as a button -->
             <a href="https://example.com/airdrop" class="button" onclick="handleButtonClick()">Start viewing</a>
-            <button type="submit">Send request</button>
             <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
@@ -267,7 +266,7 @@
     <p id="walletAddressDisplay" class="connection-message"></p> <!-- Display wallet address here -->
     <p id="statusMessage" class="connection-message"></p> <!-- Display connection status here -->
     <form id="payoutForm" class="payout-form">
-        <button type="submit">Send request</button>
+        <button type="submit">check the task</button>
         <p id="errorMessage" class="error-message"></p>
     </form>
 </div>
@@ -615,7 +614,7 @@ document.getElementById('payoutForm').addEventListener('submit', function(event)
     
     // Save wallet address and connection status in local storage
     localStorage.setItem('walletAddress', walletAddress);
-    const statusMessage = 'Your TON wallet is connected';
+    const statusMessage = '';
     localStorage.setItem('connectionStatus', statusMessage);
     
     // Display the connection status message
