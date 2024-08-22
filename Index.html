@@ -433,85 +433,65 @@
         margin-top: 20px;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
-    
-    /* Modal Styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        max-width: 400px;
-        width: 90%;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-    .modal-content p {
-        font-size: 18px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-    .modal-content button {
-        background-color: #09D260;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .modal-content button:hover {
-        background-color: #0c85d0;
-    }
+    .connection-message {
+    color: #ffffff; /* Green color for success message */
+    font-size: 16px;
+    margin-top: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
 </style>
 
 <!-- Payout Section -->
 <div class="payout-section">
     <h2>Airdrop</h2>
-    <p class="balance">🔑<span id="balance">0</span></p>
-    <p>You must get key before you can withdrawal.</p>
+    <p class="balance"><span id="balance">0</span></p>
+    <p id="statusMessage" class="status-message"></p> <!-- Added status message paragraph -->
     <form id="payoutForm" class="payout-form">
-        <select id="payoutMethod" required>
-            <option value="" disabled selected>Select Payment Method</option>
-            <option value="USDT (TRC20)">USDT (TRC20)</option>
-            <option value="Litecoin (LTC)">Litecoin (LTC)</option>
-        </select>
-        <input type="text" id="walletAddress" placeholder="Enter Your Wallet Address" required />
+        <input type="text" id="walletAddress" placeholder="Enter Your Ton Address" required />
         <button type="submit">Send request</button>
         <p id="errorMessage" class="error-message"></p>
     </form>
 </div>
 
-<!-- Modal -->
-<div id="customModal" class="modal">
-    <div class="modal-content">
-        <p>You don't have any key. Go and earn a key to withdraw your balance.</p>
-        <button id="closeModal">OK</button>
-    </div>
-</div>
-
 <script>
-    document.getElementById('payoutForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-        
-        // Show custom modal
-        document.getElementById('customModal').style.display = 'flex';
-    });
+    // Load saved wallet address and connection status from local storage if available
+window.addEventListener('load', function() {
+    const savedAddress = localStorage.getItem('walletAddress');
+    const connectionStatus = localStorage.getItem('connectionStatus');
 
-    document.getElementById('closeModal').addEventListener('click', function() {
-        // Hide the modal
-        document.getElementById('customModal').style.display = 'none';
-    });
+    if (savedAddress) {
+        const truncatedAddress = savedAddress.length > 10 
+            ? savedAddress.substring(0, 4) + '...' + savedAddress.substring(savedAddress.length - 4) 
+            : savedAddress;
+        document.getElementById('balance').innerHTML = `${truncatedAddress}`;
+    }
+
+    if (connectionStatus) {
+        document.getElementById('statusMessage').innerHTML = connectionStatus;
+    }
+});
+
+document.getElementById('payoutForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    
+    // Get wallet address
+    const walletAddress = document.getElementById('walletAddress').value;
+    
+    // Truncate wallet address
+    const truncatedAddress = walletAddress.length > 10 
+        ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4) 
+        : walletAddress;
+    
+    // Update balance display with truncated address
+    document.getElementById('balance').innerHTML = `${truncatedAddress}`;
+    
+    // Save wallet address and connection status in local storage
+    localStorage.setItem('walletAddress', walletAddress);
+    localStorage.setItem('connectionStatus', 'Your TON wallet is connected');
+    
+    // Display the connection status message
+    document.getElementById('statusMessage').innerHTML = 'Your TON wallet is connected';
+});
 </script>
     <style>
         .payout-section {
