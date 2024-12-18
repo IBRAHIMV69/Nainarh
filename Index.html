@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Tasks - Save in Browser</title>
+    <title>Arewa Tube - Upload Videos</title>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
     <style>
-        /* Amazing Style Design */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(to right, #141e30, #243b55);
-            color: #fff;
+            color: white;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
+
         .nav-button {
             background: linear-gradient(135deg, #ff6a00, #ee0979);
-            color: #fff;
+            color: white;
             padding: 12px 24px;
             border: none;
             border-radius: 30px;
-            cursor: pointer;
             font-weight: bold;
             font-size: 16px;
             margin: 16px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
+
         .video-upload {
             display: flex;
             flex-direction: column;
@@ -36,157 +38,168 @@
             border-radius: 20px;
             margin: 16px;
         }
-        .video-upload input[type="file"],
-        .video-upload button {
-            padding: 14px 28px;
-            border-radius: 12px;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            transition: all 0.3s ease;
-        }
+
         .video-upload input[type="file"] {
-            background: #fff;
-            color: #333;
-            width: 250px;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 300px;
         }
+
         .video-upload button {
             background: linear-gradient(135deg, #243b55, #ffffff);
-            color: #fff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
             cursor: pointer;
         }
+
         .video-upload button:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(255, 20, 100, 0.5);
         }
+
         .video-grid {
-            display: none; /* Initially hidden */
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 16px;
             padding: 16px;
         }
+
         .video-task {
             border-radius: 12px;
             overflow: hidden;
-            background: linear-gradient(135deg, #243b55, #ffffff);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: white;
+            color: black;
+            padding: 16px;
             text-align: center;
-            max-width: 320px;
         }
-        .video-task:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-        }
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            overflow: hidden;
-            border-radius: 8px;
-            background-color: #000;
-        }
+
         video {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
+            border-radius: 8px;
         }
+
         .video-title {
-            font-size: 15px;
             font-weight: bold;
-            margin-top: 10px;
-            color: #333;
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
+    <!-- Nav Button -->
     <button class="nav-button" onclick="toggleUploadSection()">Upload Videos</button>
-    
+
     <!-- Upload Section -->
-    <div class="video-upload" id="uploadSection" style="display: none;">
+    <div id="uploadSection" class="video-upload" style="display: none;">
         <input type="file" id="videoFileInput" accept="video/*" multiple>
         <button onclick="uploadVideos()">Upload</button>
-        <div id="uploadStatus"></div>
+        <p id="uploadStatus"></p>
     </div>
 
     <!-- Video Grid Section -->
     <div id="videoGrid" class="video-grid"></div>
 
     <script>
-        // Toggle Upload Section
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuOZGwuvp8ZfgCTz5RiT_4xWN2XoLnNkw",
+            authDomain: "arewa-tube.firebaseapp.com",
+            projectId: "arewa-tube",
+            storageBucket: "arewa-tube.appspot.com",
+            messagingSenderId: "704938562696",
+            appId: "1:704938562696:web:7d0afc6997c399c4327b3d",
+            measurementId: "G-RGHYD2VYKR"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const db = firebase.firestore();
+
+        // Toggle upload section visibility
         function toggleUploadSection() {
-            const uploadSection = document.getElementById("uploadSection");
-            const videoGrid = document.getElementById("videoGrid");
-            const isHidden = uploadSection.style.display === "none";
-            uploadSection.style.display = isHidden ? "block" : "none";
-            videoGrid.style.display = isHidden ? "grid" : "none";
+            const uploadSection = document.getElementById('uploadSection');
+            const isHidden = uploadSection.style.display === 'none';
+            uploadSection.style.display = isHidden ? 'block' : 'none';
         }
 
-        // Upload Videos
-        function uploadVideos() {
+        // Upload videos to Firebase Storage
+        async function uploadVideos() {
             const videoInput = document.getElementById('videoFileInput');
-            if (videoInput.files.length > 0) {
-                Array.from(videoInput.files).forEach(file => {
-                    const videoUrl = URL.createObjectURL(file);
-                    createVideoTask(file.name, videoUrl);
-                    saveVideoToLocal(file.name, videoUrl);
-                });
-                document.getElementById('uploadStatus').innerText = "Videos uploaded successfully!";
-            } else {
-                document.getElementById('uploadStatus').innerText = "Please select video files to upload.";
+            const status = document.getElementById('uploadStatus');
+
+            if (videoInput.files.length === 0) {
+                status.innerText = "Please select at least one video to upload.";
+                return;
             }
+
+            status.innerText = "Uploading videos...";
+            for (const file of videoInput.files) {
+                try {
+                    // Upload video to Firebase Storage
+                    const storageRef = storage.ref(`videos/${file.name}`);
+                    const uploadTask = await storageRef.put(file);
+
+                    // Get the download URL
+                    const videoUrl = await storageRef.getDownloadURL();
+
+                    // Save video metadata to Firestore
+                    await db.collection("videos").add({
+                        name: file.name,
+                        url: videoUrl,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Add video to the grid dynamically after upload
+                    addVideoToGrid(file.name, videoUrl);
+
+                    // Update the status
+                    status.innerText = `Uploaded: ${file.name}`;
+                } catch (error) {
+                    console.error("Error uploading file:", file.name, error);
+                    status.innerText = `Failed to upload: ${file.name}`;
+                }
+            }
+
+            status.innerText = "All uploads completed!";
         }
 
-        // Create Video Task
-        function createVideoTask(name, url) {
-            const videoGrid = document.getElementById('videoGrid');
+        // Add video to the grid below the nav button
+        function addVideoToGrid(name, url) {
+            const videoGrid = document.getElementById("videoGrid");
 
-            const videoTask = document.createElement('div');
-            videoTask.className = 'video-task';
+            const videoTask = document.createElement("div");
+            videoTask.className = "video-task";
 
-            const videoContainer = document.createElement('div');
-            videoContainer.className = 'video-container';
-
-            const videoPlayer = document.createElement('video');
+            const videoPlayer = document.createElement("video");
             videoPlayer.controls = true;
             videoPlayer.src = url;
 
-            videoContainer.appendChild(videoPlayer);
-
-            const videoTitle = document.createElement('p');
-            videoTitle.className = 'video-title';
+            const videoTitle = document.createElement("p");
+            videoTitle.className = "video-title";
             videoTitle.textContent = name;
 
-            videoTask.appendChild(videoContainer);
+            videoTask.appendChild(videoPlayer);
             videoTask.appendChild(videoTitle);
 
-            videoGrid.insertBefore(videoTask, videoGrid.firstChild);
+            videoGrid.insertBefore(videoTask, videoGrid.firstChild); // Insert at the top of the grid
         }
 
-        // Save Video to LocalStorage
-        function saveVideoToLocal(name, url) {
-            const videos = JSON.parse(localStorage.getItem('videos') || '[]');
-            videos.push({ name, url });
-            localStorage.setItem('videos', JSON.stringify(videos));
-        }
+        // Load videos from Firestore and display them when the page loads
+        async function loadVideos() {
+            const videoGrid = document.getElementById("videoGrid");
+            videoGrid.innerHTML = ""; // Clear the grid
 
-        // Load Stored Videos on Page Load
-        function loadStoredVideos() {
-            const videos = JSON.parse(localStorage.getItem('videos') || '[]');
-            videos.reverse().forEach(video => {
-                createVideoTask(video.name, video.url);
+            const snapshot = await db.collection("videos").orderBy("timestamp", "desc").get();
+            snapshot.forEach(doc => {
+                const video = doc.data();
+                addVideoToGrid(video.name, video.url);
             });
         }
 
-        // Initialize by Loading Videos
-        window.onload = loadStoredVideos;
+        // Load videos on page load
+        window.onload = loadVideos;
     </script>
 </body>
 </html>
