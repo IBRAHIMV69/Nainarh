@@ -3,203 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arewa Tube - Upload Videos</title>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+    <title>Search Images by Title</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: white;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #000, #000, #000);
         }
 
-        .nav-button {
-            background: linear-gradient(135deg, #ff6a00, #ee0979);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 16px;
-            margin: 16px;
-            cursor: pointer;
-        }
-
-        .video-upload {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 32px;
-            border-radius: 20px;
-            margin: 16px;
-        }
-
-        .video-upload input[type="file"] {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            width: 300px;
-        }
-
-        .video-upload button {
-            background: linear-gradient(135deg, #243b55, #ffffff);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .video-upload button:hover {
-            transform: scale(1.1);
-        }
-
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 16px;
-            padding: 16px;
-        }
-
-        .video-task {
-            border-radius: 12px;
-            overflow: hidden;
-            background: white;
-            color: black;
-            padding: 16px;
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #000, #000, #000);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
             text-align: center;
         }
 
-        video {
-            width: 100%;
-            border-radius: 8px;
+        header h1 {
+            margin: 2;
+            color: #fff;
+            font-size: 0.7rem;
         }
 
-        .video-title {
-            font-weight: bold;
-            margin-top: 8px;
+        .search-bar {
+            margin-top: 5px;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
         }
+
+        .search-bar input {
+            width: 90%;
+            padding: 10px;
+            font-size: 0.6rem;
+            border: 1px solid #000;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .cloud-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        .cloud-item {
+            text-align: center;
+            display: none; /* Initially hide all items */
+        }
+
+        .cloud-item.active {
+            display: block; /* Show only matching items */
+        }
+
+        .cloud-item img {
+            width: 150px;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 4%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cloud-item p {
+            margin-top: 10px;
+            font-size: 0.5rem;
+            color: #fff;
+        }
+        .url-button {
+            padding: 3px 24px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #fff, #fff);
+            color: #000;
+            cursor: pointer;
+            margin: 8px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .url-button:hover {
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
     </style>
 </head>
 <body>
-    <!-- Nav Button -->
-    <button class="nav-button" onclick="toggleUploadSection()">Upload Videos</button>
-
-    <!-- Upload Section -->
-    <div id="uploadSection" class="video-upload" style="display: none;">
-        <input type="file" id="videoFileInput" accept="video/*" multiple>
-        <button onclick="uploadVideos()">Upload</button>
-        <p id="uploadStatus"></p>
-    </div>
-
-    <!-- Video Grid Section -->
-    <div id="videoGrid" class="video-grid"></div>
+    <header>
+        
+        <h1>i TUBE - MOVIES</h1>
+          
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search movie by title..." />
+        </div>
+        <h1> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Open App</a> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Hot 🔥 Movies</a> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Playlist</a></h1>
+        
+    </header>
+    <div class="cloud-container" id="cloudContainer"></div>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAuOZGwuvp8ZfgCTz5RiT_4xWN2XoLnNkw",
-            authDomain: "arewa-tube.firebaseapp.com",
-            projectId: "arewa-tube",
-            storageBucket: "arewa-tube.appspot.com",
-            messagingSenderId: "704938562696",
-            appId: "1:704938562696:web:7d0afc6997c399c4327b3d",
-            measurementId: "G-RGHYD2VYKR"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-        const db = firebase.firestore();
-
-        // Toggle upload section visibility
-        function toggleUploadSection() {
-            const uploadSection = document.getElementById('uploadSection');
-            const isHidden = uploadSection.style.display === 'none';
-            uploadSection.style.display = isHidden ? 'block' : 'none';
-        }
-
-        // Upload videos to Firebase Storage
-        async function uploadVideos() {
-            const videoInput = document.getElementById('videoFileInput');
-            const status = document.getElementById('uploadStatus');
-
-            if (videoInput.files.length === 0) {
-                status.innerText = "Please select at least one video to upload.";
-                return;
+        // Image data: add image URLs, links, and titles here
+        const images = [
+            { 
+                url: "https://bit.ly/4gCtC1L", 
+                link: "https://www.youtube.com/embed/ZG6yG8PTmfY", // Replace with actual YouTube video ID
+                title: "APOCALYPTO 2 - FULL" 
+            },
+            { 
+                url: "https://bit.ly/4gDe4dm", 
+                link: "https://www.youtube.com/embed/dLWTkLftll0", // Replace with actual YouTube video ID
+                title: "JACK THE GIANT SLAYER  - FULL" 
+            },
+            { 
+                url: "https://bit.ly/405kXOj", 
+                link: "https://www.youtube.com/embed/CumW3IY1mMg", 
+                title: "GOD OF WAR - FULL" 
+            },
+            { 
+                url: "https://bit.ly/4ftI6zg", 
+                link: "https://www.youtube.com/embed/Rgvo3zJ5m7s", 
+                title: "Black Water - Full" 
+            },
+            { 
+                url: "https://bit.ly/4ftrM1I", 
+                link: "https://www.youtube.com/embed/3Fzwa_Y1KAA", 
+                title: "Beneath The Surface" 
+            },
+            { 
+                url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
+                link: "https://example.com/image3", 
+                title: "Image 3 Title" 
             }
+        ];
 
-            status.innerText = "Uploading videos...";
-            for (const file of videoInput.files) {
-                try {
-                    // Upload video to Firebase Storage
-                    const storageRef = storage.ref(`videos/${file.name}`);
-                    const uploadTask = await storageRef.put(file);
+        // Reference to the container
+        const container = document.getElementById('cloudContainer');
 
-                    // Get the download URL
-                    const videoUrl = await storageRef.getDownloadURL();
+        // Create image elements
+        images.forEach(image => {
+            const item = document.createElement('div');
+            item.className = 'cloud-item';
+            item.dataset.title = image.title.toLowerCase(); // Store the title in lowercase for easier search
 
-                    // Save video metadata to Firestore
-                    await db.collection("videos").add({
-                        name: file.name,
-                        url: videoUrl,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+            const anchor = document.createElement('a');
+            anchor.href = image.link;
+            anchor.target = "_blank";
 
-                    // Add video to the grid dynamically after upload
-                    addVideoToGrid(file.name, videoUrl);
+            const img = document.createElement('img');
+            img.src = image.url;
+            img.alt = image.title;
 
-                    // Update the status
-                    status.innerText = `Uploaded: ${file.name}`;
-                } catch (error) {
-                    console.error("Error uploading file:", file.name, error);
-                    status.innerText = `Failed to upload: ${file.name}`;
+            const title = document.createElement('p');
+            title.textContent = image.title;
+
+            anchor.appendChild(img);
+            item.appendChild(anchor);
+            item.appendChild(title);
+            container.appendChild(item);
+        });
+
+        // Reference to the search input
+        const searchInput = document.getElementById('searchInput');
+
+        // Filter images based on the search input
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            const items = document.querySelectorAll('.cloud-item');
+            
+            items.forEach(item => {
+                const title = item.dataset.title;
+                if (title.includes(query)) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
                 }
-            }
-
-            status.innerText = "All uploads completed!";
-        }
-
-        // Add video to the grid below the nav button
-        function addVideoToGrid(name, url) {
-            const videoGrid = document.getElementById("videoGrid");
-
-            const videoTask = document.createElement("div");
-            videoTask.className = "video-task";
-
-            const videoPlayer = document.createElement("video");
-            videoPlayer.controls = true;
-            videoPlayer.src = url;
-
-            const videoTitle = document.createElement("p");
-            videoTitle.className = "video-title";
-            videoTitle.textContent = name;
-
-            videoTask.appendChild(videoPlayer);
-            videoTask.appendChild(videoTitle);
-
-            videoGrid.insertBefore(videoTask, videoGrid.firstChild); // Insert at the top of the grid
-        }
-
-        // Load videos from Firestore and display them when the page loads
-        async function loadVideos() {
-            const videoGrid = document.getElementById("videoGrid");
-            videoGrid.innerHTML = ""; // Clear the grid
-
-            const snapshot = await db.collection("videos").orderBy("timestamp", "desc").get();
-            snapshot.forEach(doc => {
-                const video = doc.data();
-                addVideoToGrid(video.name, video.url);
             });
-        }
+        });
 
-        // Load videos on page load
-        window.onload = loadVideos;
+        // Show all images by default
+        document.querySelectorAll('.cloud-item').forEach(item => item.classList.add('active'));
     </script>
 </body>
 </html>
