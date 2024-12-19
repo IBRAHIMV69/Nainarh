@@ -3,44 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Images by Title</title>
+    <title>Search Images and View Videos</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #000, #000, #000);
+            background: linear-gradient(to bottom, #eef2f3, #8e9eab);
         }
 
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: linear-gradient(135deg, #000, #000, #000);
+            background: #ffffff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 10px 0;
             text-align: center;
         }
 
         header h1 {
-            margin: 2;
-            color: #fff;
-            font-size: 0.7rem;
+            margin: 0;
+            color: #333;
+            font-size: 2rem;
         }
 
         .search-bar {
-            margin-top: 5px;
-            width: 100%;
-            max-width: 350px;
+            margin-top: 10px;
+            width: 95%;
+            max-width: 400px;
             margin: 0 auto;
         }
 
         .search-bar input {
             width: 90%;
             padding: 10px;
-            font-size: 0.6rem;
-            border: 1px solid #000;
-            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -67,74 +67,81 @@
             width: 150px;
             height: 230px;
             object-fit: cover;
-            border-radius: 4%;
+            border-radius: 2%;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
 
         .cloud-item p {
             margin-top: 10px;
-            font-size: 0.5rem;
-            color: #fff;
+            font-size: 1rem;
+            color: #333;
         }
-        .url-button {
-            padding: 3px 24px;
-            border-radius: 8px;
+
+        /* Nav container for the video */
+        .nav-video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-video-container iframe {
+            width: 80%;
+            height: 80%;
             border: none;
-            background: linear-gradient(135deg, #fff, #fff);
-            color: #000;
-            cursor: pointer;
-            margin: 8px;
-            text-decoration: none;
-            text-align: center;
         }
-        .url-button:hover {
-            background: linear-gradient(135deg, #ff6a00, #ee0979);
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5%;
+        }
     </style>
 </head>
 <body>
     <header>
-        
-        <h1>i TUBE - MOVIES</h1>
-          
+        <h1>i TUBE</h1>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search movie by title..." />
+            <input type="text" id="searchInput" placeholder="Search by title..." />
         </div>
-        <h1> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Open App</a> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Hot 🔥 Movies</a> <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Playlist</a></h1>
-        
     </header>
     <div class="cloud-container" id="cloudContainer"></div>
 
+    <!-- Nav for video -->
+    <div class="nav-video-container" id="navVideoContainer">
+        <button class="close-btn" onclick="closeVideo()">Close</button>
+        <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+
     <script>
-        // Image data: add image URLs, links, and titles here
+        // Image data with video links
         const images = [
             { 
-                url: "https://bit.ly/4gCtC1L", 
-                link: "https://www.youtube.com/embed/ZG6yG8PTmfY", // Replace with actual YouTube video ID
-                title: "APOCALYPTO 2 - FULL" 
-            },
-            { 
-                url: "https://bit.ly/4gDe4dm", 
-                link: "https://www.youtube.com/embed/dLWTkLftll0", // Replace with actual YouTube video ID
-                title: "JACK THE GIANT SLAYER  - FULL" 
-            },
-            { 
-                url: "https://bit.ly/405kXOj", 
-                link: "https://www.youtube.com/embed/CumW3IY1mMg", 
-                title: "GOD OF WAR - FULL" 
-            },
-            { 
-                url: "https://bit.ly/4ftI6zg", 
-                link: "https://www.youtube.com/embed/Rgvo3zJ5m7s", 
-                title: "Black Water - Full" 
-            },
-            { 
-                url: "https://bit.ly/4ftrM1I", 
-                link: "https://www.youtube.com/embed/3Fzwa_Y1KAA", 
-                title: "Beneath The Surface" 
+                url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
+                link: "https://www.youtube.com/embed/1k7yUSKH1oA", // Replace with actual YouTube video ID
+                title: "Image 1 Title" 
             },
             { 
                 url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
-                link: "https://example.com/image3", 
+                link: "https://www.youtube.com/embed/VIDEO_ID_2", // Replace with actual YouTube video ID
+                title: "Image 2 Title" 
+            },
+            { 
+                url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
+                link: "https://www.youtube.com/embed/VIDEO_ID_3", // Replace with actual YouTube video ID
                 title: "Image 3 Title" 
             }
         ];
@@ -163,6 +170,11 @@
             item.appendChild(anchor);
             item.appendChild(title);
             container.appendChild(item);
+
+            // Add click event to open video
+            img.addEventListener('click', () => {
+                openVideo(image.link);
+            });
         });
 
         // Reference to the search input
@@ -182,6 +194,24 @@
                 }
             });
         });
+
+        // Function to open video in the nav
+        function openVideo(videoUrl) {
+            const videoFrame = document.getElementById('videoFrame');
+            const videoContainer = document.getElementById('navVideoContainer');
+
+            videoFrame.src = videoUrl;
+            videoContainer.style.display = 'flex'; // Show the video container
+        }
+
+        // Function to close video container
+        function closeVideo() {
+            const videoFrame = document.getElementById('videoFrame');
+            const videoContainer = document.getElementById('navVideoContainer');
+
+            videoFrame.src = ''; // Stop the video
+            videoContainer.style.display = 'none'; // Hide the video container
+        }
 
         // Show all images by default
         document.querySelectorAll('.cloud-item').forEach(item => item.classList.add('active'));
