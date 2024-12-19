@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Images and View Videos</title>
+    <title>Search Images and Videos</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #eef2f3, #8e9eab);
+            background: linear-gradient(to bottom, #000, #000);
+            color: #fff;
         }
 
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: #ffffff;
+            background: #000;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 10px 0;
             text-align: center;
@@ -24,23 +25,38 @@
 
         header h1 {
             margin: 0;
-            color: #333;
-            font-size: 2rem;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .url-button {
+            padding: 5px 20px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        .url-button:hover {
+            opacity: 0.9;
         }
 
         .search-bar {
             margin-top: 10px;
-            width: 95%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 350px;
             margin: 0 auto;
         }
 
         .search-bar input {
             width: 90%;
             padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            font-size: 0.8rem;
+            border: 1px solid #000;
+            border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -56,30 +72,41 @@
 
         .cloud-item {
             text-align: center;
-            display: none; /* Initially hide all items */
+            display: none;
         }
 
         .cloud-item.active {
-            display: block; /* Show only matching items */
+            display: block;
         }
 
         .cloud-item img {
             width: 150px;
-            height: 230px;
+            height: 220px;
             object-fit: cover;
             border-radius: 2%;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cloud-item img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
             cursor: pointer;
         }
 
         .cloud-item p {
-            margin-top: 10px;
-            font-size: 1rem;
-            color: #333;
+            margin-top: 5px;
+            font-size: 0.8rem;
         }
 
-        /* Nav container for the video */
-        .nav-video-container {
+        .no-results {
+            text-align: center;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .video-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -87,131 +114,125 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
         }
 
-        .nav-video-container iframe {
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal iframe {
             width: 80%;
-            height: 80%;
+            height: 60%;
             border: none;
         }
 
-        .close-btn {
+        .video-modal .close-button {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: red;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
+            background: #ff6a00;
             border: none;
-            border-radius: 5%;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .video-modal .close-button:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>i TUBE</h1>
+        <h1>i TUBE 
+            <a href="https://drive.google.com/file/d/15TmwkJd8aAoe8op04SNPn5Fd58g4B-5q/view?usp=drivesdk" target="_blank" class="url-button">Open App</a>
+        </h1>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by title..." />
+            <input type="text" id="searchInput" placeholder="Search videos or images..." />
         </div>
     </header>
     <div class="cloud-container" id="cloudContainer"></div>
+    <p class="no-results" id="noResults">No results found</p>
 
-    <!-- Nav for video -->
-    <div class="nav-video-container" id="navVideoContainer">
-        <button class="close-btn" onclick="closeVideo()">Close</button>
+    <div class="video-modal" id="videoModal">
+        <button class="close-button" id="closeModal">Close</button>
         <iframe id="videoFrame" src="" allowfullscreen></iframe>
     </div>
 
     <script>
-        // Image data with video links
         const images = [
             { 
                 url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
-                link: "https://www.youtube.com/embed/1k7yUSKH1oA", // Replace with actual YouTube video ID
-                title: "Image 1 Title" 
+                link: "https://www.youtube.com/embed/1k7yUSKH1oA",
+                title: "Amazing Landscape" 
+            },
+            { 
+                url: "https://blogger.googleusercontent.com/img/a/AVvXsEgeXCL1T_82_o9k-LUNbMqUkQ17GQSClT8klPIkKuT2k9L1BMmdDK7Eg-9LnYZdpbGihYHih0MWR5fpsAm_VpO635fXwKj4lYlNuQJPDpYMreaue7nsl97p1KmPxOGmr-K6zpnbJaQAkldFSb4sDBEJZqyMALGlfhyreC_6VkNWPdVLZCxLedOLayk2vYms=s1104", 
+                link: "https://www.youtube.com/embed/2abcXyZ1234",
+                title: "Beautiful Sunset" 
             },
             { 
                 url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
-                link: "https://www.youtube.com/embed/VIDEO_ID_2", // Replace with actual YouTube video ID
-                title: "Image 2 Title" 
-            },
-            { 
-                url: "https://blogger.googleusercontent.com/img/a/AVvXsEgKdO9UlvvDNOHruiwjpBKHDvx8yCNrPyJquHxtd74iSQUHjgA7QiBj-orZKW7AZONDiKj97B5E8Y1-Uz1_voycul1wrAFAHcKiEEFy9NnKtPMnA4-qgPh0Z0-1J4YCQv_wHwpWJ3tNn9ejMRQK7lgjBofKDn8UB4bhznHFLdj--NIp8yDqU_jafUACUdl2=s900", 
-                link: "https://www.youtube.com/embed/VIDEO_ID_3", // Replace with actual YouTube video ID
-                title: "Image 3 Title" 
+                link: "https://www.youtube.com/embed/3xUvRcD5678", 
+                title: "Mountain View" 
             }
         ];
 
-        // Reference to the container
         const container = document.getElementById('cloudContainer');
+        const noResults = document.getElementById('noResults');
+        const videoModal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        const closeModal = document.getElementById('closeModal');
 
-        // Create image elements
         images.forEach(image => {
             const item = document.createElement('div');
             item.className = 'cloud-item';
-            item.dataset.title = image.title.toLowerCase(); // Store the title in lowercase for easier search
-
-            const anchor = document.createElement('a');
-            anchor.href = image.link;
-            anchor.target = "_blank";
+            item.dataset.title = image.title.toLowerCase();
 
             const img = document.createElement('img');
             img.src = image.url;
             img.alt = image.title;
+            img.loading = "lazy";
 
             const title = document.createElement('p');
             title.textContent = image.title;
 
-            anchor.appendChild(img);
-            item.appendChild(anchor);
+            item.appendChild(img);
             item.appendChild(title);
             container.appendChild(item);
 
-            // Add click event to open video
             img.addEventListener('click', () => {
-                openVideo(image.link);
+                videoFrame.src = image.link;
+                videoModal.classList.add('active');
             });
         });
 
-        // Reference to the search input
+        closeModal.addEventListener('click', () => {
+            videoModal.classList.remove('active');
+            videoFrame.src = "";
+        });
+
         const searchInput = document.getElementById('searchInput');
 
-        // Filter images based on the search input
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
             const items = document.querySelectorAll('.cloud-item');
-            
+            let visibleItems = 0;
+
             items.forEach(item => {
                 const title = item.dataset.title;
                 if (title.includes(query)) {
                     item.classList.add('active');
-                } else {
+                    visibleItems
                     item.classList.remove('active');
                 }
             });
         });
-
-        // Function to open video in the nav
-        function openVideo(videoUrl) {
-            const videoFrame = document.getElementById('videoFrame');
-            const videoContainer = document.getElementById('navVideoContainer');
-
-            videoFrame.src = videoUrl;
-            videoContainer.style.display = 'flex'; // Show the video container
-        }
-
-        // Function to close video container
-        function closeVideo() {
-            const videoFrame = document.getElementById('videoFrame');
-            const videoContainer = document.getElementById('navVideoContainer');
-
-            videoFrame.src = ''; // Stop the video
-            videoContainer.style.display = 'none'; // Hide the video container
-        }
 
         // Show all images by default
         document.querySelectorAll('.cloud-item').forEach(item => item.classList.add('active'));
