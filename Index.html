@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #000, #111);
+            background: linear-gradient(to bottom, #000, #000);
             color: #fff;
         }
 
@@ -34,7 +34,7 @@
 
         header h1 {
             margin: 0;
-            color: #fff;
+            color: #000;
         font-size: 0.8rem;
         }
 
@@ -106,19 +106,25 @@
         .cloud-item button:hover {
             background: var(--button-hover-color);
         }
+        .favorites-title {
+            margin: 20px 0 10px 20px;
+            font-size: 0.4rem;
+            font-weight: bold;
+            text-align: center;
+        }
 
         .favorite-star {
             position: absolute;
             top: 5px;
             right: 5px;
-            font-size: 1rem;
-            color: #fff;
+            font-size: 2rem;
+            color: #FFF;
             cursor: pointer;
             transition: color 0.3s;
         }
 
         .favorite-star:hover {
-            color: #000;
+            color: #FF0000;
         }
 
         .favorites-carousel {
@@ -141,7 +147,7 @@
 
         .favorites-carousel img {
             width: 120px;
-            height: 200px;
+            height: 170px;
             border-radius: 4px;
             object-fit: cover;
             cursor: pointer;
@@ -231,6 +237,7 @@
         </div>
     </header>
     <div class="favorites-carousel" id="favoritesCarousel"></div>
+    <div class="favorites-title">PIN YOUR FAVORITE BY CLICKING 🤍 LOVE</div>
     <div class="cloud-container" id="cloudContainer"></div>
     <p class="no-results" id="noResults">No results found</p>
     
@@ -244,7 +251,10 @@
         const videos = [
             { title: "APOCALYPSE 2 - FULL", thumbnail: "https://bit.ly/4gCtC1L", link: "https://www.youtube.com/embed/ZG6yG8PTmfY" },
             { title: "JACK THE GIANT SLAYER", thumbnail: "https://bit.ly/4gDe4dm", link: "https://www.youtube.com/embed/dLWTkLftll0" },
-            { title: "GOD OF WAR - FULL", thumbnail: "https://bit.ly/405kXOj", link: "https://www.youtube.com/embed/CumW3IY1mMg" }
+            { title: "GOD OF WAR - FULL", thumbnail: "https://bit.ly/405kXOj", link: "https://www.youtube.com/embed/CumW3IY1mMg" },
+            { title: "VIKING HUNTRESS - FULL", thumbnail: "https://bit.ly/4fwBQqK", link: "https://www.youtube.com/embed/BjkncLAZu80" },
+            { title: "GUNS OF EDEN - FULL", thumbnail: "https://bit.ly/3VRBV13", link: "https://www.youtube.com/embed/3_i60BLtN_s" },
+            { title: "JURASSIC TRIANGLE", thumbnail: "https://bit.ly/3ZLSaxS", link: "https://www.youtube.com/embed/UPjyNg1mKAM" }
         ];
 
         const cloudContainer = document.getElementById('cloudContainer');
@@ -274,7 +284,7 @@
                 videoItem.innerHTML = `
                     <img src="${video.thumbnail}" alt="${video.title}" onclick="openVideo('${video.link}')" />
                     <p>${video.title}</p>
-                    <span class="favorite-star" onclick="toggleFavorite(${index})">♥️ Save</span>
+                    <span class="favorite-star" onclick="toggleFavorite(${index})">&#9829</span>
                 `;
 
                 cloudContainer.appendChild(videoItem);
